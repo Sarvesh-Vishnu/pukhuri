@@ -12,8 +12,9 @@ from utils.data_loader import (
 )
 from utils.grievance import ISSUE_TYPES, draft_complaint, route
 from utils.i18n import t
+from utils.theme import init_page
 
-st.set_page_config(page_title="Grievance Drafter — Pukhuri", page_icon="✍️", layout="wide")
+init_page(title="Grievance Drafter", icon="✍️")
 
 
 def copy_button(text: str) -> None:
@@ -21,17 +22,18 @@ def copy_button(text: str) -> None:
     components.html(
         f"""
         <button id="copybtn"
-            style="padding:8px 14px;border-radius:6px;border:1px solid #0a6cb1;
-                   background:#0a6cb1;color:white;cursor:pointer;font-size:14px">
-          📋 Copy complaint to clipboard
+            style="padding:8px 14px;border-radius:8px;border:1px solid #0284c7;
+                   background:#0284c7;color:white;cursor:pointer;font-size:14px;
+                   font-family:'Inter',sans-serif;font-weight:500">
+          Copy complaint to clipboard
         </button>
-        <span id="copystatus" style="margin-left:10px;color:#2ca02c;font-family:sans-serif"></span>
+        <span id="copystatus" style="margin-left:10px;color:#16a34a;font-family:'Inter',sans-serif;font-size:13px"></span>
         <script>
           const btn = document.getElementById('copybtn');
           btn.addEventListener('click', async () => {{
             try {{
               await navigator.clipboard.writeText(`{safe}`);
-              document.getElementById('copystatus').innerText = '✓ Copied. Now paste it on the portal below.';
+              document.getElementById('copystatus').innerText = '✓ Copied. Paste it on the portal below.';
             }} catch (e) {{
               document.getElementById('copystatus').innerText = '✗ Could not copy — select and copy manually.';
             }}
@@ -44,11 +46,11 @@ def copy_button(text: str) -> None:
 
 def main() -> None:
     lang = st.session_state.get("lang", "en")
-    st.title(f"✍️ {t('nav_grievance', lang)}")
-    st.markdown(
+    st.markdown(f"# {t('nav_grievance', lang)}")
+    st.caption(
         "Tell us where you live, what the issue is, and a brief description. "
-        "We route to the right department for your state, draft a formal letter, and link "
-        "to the portal you should file it on. **We do not auto-submit** — the citizen always signs and files."
+        "We route to the right department for your state, draft a formal letter, and link to the "
+        "portal you should file it on. **We do not auto-submit** — the citizen always signs and files."
     )
 
     states_df = load_states()
@@ -58,13 +60,11 @@ def main() -> None:
     with st.form("grievance_form"):
         c1, c2 = st.columns(2)
         with c1:
-            state = st.selectbox(
-                t("select_state", lang),
-                sorted(states_df["state"].unique().tolist()),
-                index=sorted(states_df["state"].unique().tolist()).index(st.session_state["state"])
-                if st.session_state.get("state") in states_df["state"].unique()
-                else 0,
-            )
+            state_options = sorted(states_df["state"].unique().tolist())
+            cur_state = st.session_state.get("state")
+            state_idx = state_options.index(cur_state) if cur_state in state_options else 0
+            state = st.selectbox(t("select_state", lang), state_options, index=state_idx)
+
             d_opts = ["(not in list / use state-level)"] + sorted(
                 districts_df[districts_df["state"] == state]["district"].tolist()
             )
@@ -127,7 +127,7 @@ def main() -> None:
         submitted = st.form_submit_button("Route & draft my complaint", type="primary")
 
     if not submitted:
-        st.info("Fill in the form above and click **Route & draft my complaint**.")
+        st.info("Fill in the form above and click **Route & draft my complaint**.", icon=":material/info:")
         return
 
     if not (name and address and description):
@@ -135,31 +135,31 @@ def main() -> None:
         return
 
     routing = route(state, classification, issue_key)
-    st.success("✅ Routed. Here's where this complaint should go:")
+    st.success("Routed. Here's where this complaint should go:", icon=":material/check_circle:")
 
     col_a, col_b = st.columns(2)
     with col_a:
-        st.markdown("#### 1️⃣ File with (primary)")
+        st.markdown("##### 1. File with (primary)")
         st.markdown(f"**{routing.primary_name}**")
         if routing.primary_portal:
             st.markdown(f"[Open portal →]({routing.primary_portal})")
     with col_b:
-        st.markdown("#### 2️⃣ Escalation if unresolved")
+        st.markdown("##### 2. Escalation if unresolved")
         st.markdown(f"**{routing.escalation_name}**")
         if routing.escalation_portal:
             st.markdown(f"[Open portal →]({routing.escalation_portal})")
 
-    st.markdown(f"#### 3️⃣ State grievance portal")
+    st.markdown(f"##### 3. State grievance portal")
     st.markdown(f"**{routing.grievance_portal_name}** — [Open →]({routing.grievance_portal_url})")
     st.markdown(
-        f"#### 4️⃣ Universal escalation: CPGRAMS — "
+        f"##### 4. Universal escalation: CPGRAMS — "
         f"[{auth['national']['cpgrams']['portal']}]({auth['national']['cpgrams']['portal']})"
     )
 
-    st.info(routing.rationale)
+    st.info(routing.rationale, icon=":material/route:")
 
-    st.markdown("---")
-    st.markdown("### 📝 Drafted complaint")
+    st.divider()
+    st.markdown("### Drafted complaint")
     body = draft_complaint(
         name=name,
         address=address,

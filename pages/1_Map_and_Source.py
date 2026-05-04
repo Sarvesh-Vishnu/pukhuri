@@ -1,10 +1,10 @@
-"""Map & Source — interactive district markers + selected-district profile."""
+"""Map & Source — district markers + selected-district profile."""
 from __future__ import annotations
 
 import folium
-import streamlit as st
 from folium.plugins import MarkerCluster
-from streamlit_folium import st_folium
+
+import streamlit as st
 
 from utils.data_loader import (
     get_district_or_state_profile,
@@ -13,8 +13,9 @@ from utils.data_loader import (
     load_states,
 )
 from utils.i18n import t
+from utils.theme import init_page, render_map
 
-st.set_page_config(page_title="Map & Source — Pukhuri", page_icon="🗺️", layout="wide")
+init_page(title="Map & Source", icon="🗺️")
 
 CONTAMINANT_COLORS = {
     "arsenic": "#7e1f86",
@@ -25,12 +26,6 @@ CONTAMINANT_COLORS = {
     "iron": "#bcbd22",
     "microbial": "#2ca02c",
     "default": "#6c757d",
-}
-
-SOURCE_ICONS = {
-    "groundwater": "tint",
-    "surface_water": "water",
-    "mixed": "exchange",
 }
 
 
@@ -58,8 +53,8 @@ def build_map(districts_df, focus_state: str | None, focus_district: str | None)
         center, zoom = (22.0, 80.0), 5
 
     m = folium.Map(location=center, zoom_start=zoom, tiles="cartodbpositron", control_scale=True)
-
     cluster = MarkerCluster(name="Districts", show=True).add_to(m)
+
     for _, r in districts_df.iterrows():
         color = primary_marker_color(r["primary_contaminants"])
         contaminants_str = ", ".join(r["primary_contaminants"]) or "no major issues in snapshot"
@@ -119,30 +114,21 @@ def render_profile(state: str, district: str | None) -> None:
     contaminants = load_contaminants()
     lang = st.session_state.get("lang", "en")
     title = f"{profile['district']}, {profile['state']}" if profile["district"] else profile["state"]
-    st.subheader(f"📍 {title}")
+    st.markdown(f"### {title}")
 
     if profile["level"] == "state" and district:
         st.caption(t("no_district_data", lang))
 
     col_a, col_b, col_c = st.columns(3)
-    col_a.metric(
-        t("source_label", lang),
-        profile["dominant_source"].replace("_", " ").title(),
-    )
-    col_b.metric(
-        t("contaminants_label", lang),
-        ", ".join(profile["primary_contaminants"]) or "—",
-    )
+    col_a.metric(t("source_label", lang), profile["dominant_source"].replace("_", " ").title())
+    col_b.metric(t("contaminants_label", lang), ", ".join(profile["primary_contaminants"]) or "—")
     if profile.get("jjm_coverage_pct") is not None:
-        col_c.metric(
-            t("jjm_coverage", lang),
-            f"{profile['jjm_coverage_pct']}%",
-        )
+        col_c.metric(t("jjm_coverage", lang), f"{profile['jjm_coverage_pct']}%")
 
     if profile.get("major_basins"):
-        st.markdown(f"**{t('basin_label', lang)}:** {', '.join(profile['major_basins'])}")
+        st.markdown(f"**{t('basin_label', lang)}** · {', '.join(profile['major_basins'])}")
     if profile.get("major_rivers"):
-        st.markdown(f"**{t('rivers_label', lang)}:** {', '.join(profile['major_rivers'])}")
+        st.markdown(f"**{t('rivers_label', lang)}** · {', '.join(profile['major_rivers'])}")
     if profile.get("notes"):
         st.markdown(f"> {profile['notes']}")
 
@@ -152,44 +138,43 @@ def render_profile(state: str, district: str | None) -> None:
             info = contaminants.get(c)
             if not info:
                 continue
-            with st.expander(f"{info['name']} ({info['symbol']})"):
+            with st.expander(f"{info['name']}  ·  {info['symbol']}"):
                 st.markdown(f"**{t('bis_limits', lang)}**")
                 st.markdown(
-                    f"- Acceptable: **{info['bis_acceptable_mg_l']} mg/L** "
+                    f"- Acceptable: **{info['bis_acceptable_mg_l']} mg/L**  "
                     f"· Permissible: **{info['bis_permissible_mg_l']} mg/L**"
                 )
-                st.markdown(f"**Origin:** {info['natural_origin']}")
-                st.markdown(f"**{t('health_effects', lang)}:**")
+                st.markdown(f"**Origin** · {info['natural_origin']}")
+                st.markdown(f"**{t('health_effects', lang)}**")
                 for h in info["health_effects"]:
                     st.markdown(f"- {h}")
                 st.page_link(
                     "pages/2_Contaminants_and_Restoration.py",
-                    label=f"See treatment & restoration options for {info['name']} →",
+                    label=f"See treatment & restoration options for {info['name']}",
                 )
 
 
 def main() -> None:
-    lang = st.session_state.get("lang", "en")
-    st.title(f"🗺️ {t('nav_map', lang)}")
+    st.markdown("# Map & Source")
     st.caption(
         "Markers cluster by zoom. Click a district to see its primary contaminants. "
-        "Use the sidebar to pick a state and district for the detailed profile below."
+        "Pick a state and district from the sidebar for the detailed profile below."
     )
 
     districts_df = load_districts()
-    states_df = load_states()  # noqa: F841 — preloads cache
+    load_states()  # warms the cache
 
     state = st.session_state.get("state")
     district = st.session_state.get("district")
 
     fmap = build_map(districts_df, state, district)
-    st_folium(fmap, width=None, height=560, returned_objects=[])
+    render_map(fmap, height=560)
 
-    st.markdown("---")
+    st.divider()
     if state:
         render_profile(state, district)
     else:
-        st.info("👈 Pick a state in the sidebar to see its water profile here.")
+        st.info("Pick a state in the sidebar to see its water profile here.")
 
 
 main()

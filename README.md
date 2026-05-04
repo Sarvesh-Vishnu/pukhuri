@@ -5,7 +5,8 @@ colorFrom: blue
 colorTo: indigo
 sdk: streamlit
 sdk_version: 1.32.0
-app_file: app.py
+app_file: Home.py
+python_version: "3.11"
 pinned: false
 license: mit
 short_description: Water source, contaminants, and grievance routing for India.

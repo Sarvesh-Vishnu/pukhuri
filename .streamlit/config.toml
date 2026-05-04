@@ -1,9 +1,9 @@
 [theme]
 base = "light"
-primaryColor = "#0a6cb1"
+primaryColor = "#0284c7"
 backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#eef5fb"
-textColor = "#0d1b2a"
+secondaryBackgroundColor = "#f6f8fc"
+textColor = "#0f172a"
 font = "sans serif"
 
 [server]
@@ -12,3 +12,7 @@ runOnSave = true
 
 [browser]
 gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = true

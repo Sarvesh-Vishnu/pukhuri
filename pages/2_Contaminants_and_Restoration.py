@@ -1,48 +1,52 @@
-"""Contaminants & Restoration — guide page with BIS limits, treatment, and gov schemes."""
+"""Contaminants & Restoration — guide page."""
 from __future__ import annotations
 
 import streamlit as st
 
-from utils.data_loader import load_contaminants, load_schemes
+from utils.data_loader import (
+    get_district_or_state_profile,
+    load_contaminants,
+    load_schemes,
+)
 from utils.i18n import t
+from utils.theme import init_page
 
-st.set_page_config(page_title="Contaminants & Restoration — Pukhuri", page_icon="🧪", layout="wide")
+init_page(title="Contaminants & Restoration", icon="🧪")
 
 
 def best_practices_section() -> None:
-    st.markdown(f"### 🏠 {t('best_practices')}")
+    st.markdown(f"### {t('best_practices')}")
     st.markdown(
         """
-- **Test before you trust.** Free water-quality testing is available at District Public Health Labs
-  (under PHED) and via Field Test Kits (FTKs) distributed under Jal Jeevan Mission. ASHA workers in
-  many states are trained to test for fluoride, arsenic, iron, nitrate, hardness, and bacterial load.
-- **For boiling-eligible threats only.** Boiling for 1 minute at a rolling boil reliably kills
-  microbes — but **does not remove fluoride, arsenic, nitrate, uranium, or salinity** (it can
-  *concentrate* them).
+- **Test before you trust.** Free testing is available at District Public Health Labs (under PHED) and
+  via Field Test Kits (FTKs) distributed under Jal Jeevan Mission. ASHA workers in many states are
+  trained for fluoride, arsenic, iron, nitrate, hardness, and bacterial load.
+- **For boiling-eligible threats only.** Boiling for 1 minute at a rolling boil reliably kills microbes —
+  but **does not remove** fluoride, arsenic, nitrate, uranium, or salinity (it can *concentrate* them).
 - **Match the filter to the contaminant.**
   - *Microbial only:* boiling, chlorination, UV, or SODIS — RO is overkill.
   - *Iron / hardness:* aeration + sand filter, or activated carbon.
   - *Fluoride / arsenic / uranium / high TDS:* RO with the right membrane, **certified for the contaminant**.
   - *Nitrate:* RO or ion exchange. Boiling makes it worse.
-- **Don't waste RO reject water.** A typical domestic RO wastes 3 L for every 1 L purified.
-  Plumb the reject line into a storage tank for mopping, gardens, or flushing.
+- **Don't waste RO reject water.** A typical domestic RO wastes 3 L for every 1 L purified. Plumb the
+  reject line into a storage tank for mopping, gardens, or flushing.
 - **Maintain wells & overhead tanks.** Annual chlorination of dug wells, half-yearly cleaning of
   overhead tanks, and 15 m+ setback from septic tanks are the cheapest microbial controls.
-- **Rainwater harvesting where viable.** First-flush diverters + filtration brings rooftop water
-  near drinking standard in non-industrial areas. Many states subsidise installation.
-- **Report & demand testing.** You have a right to know what's in your tap water. File for a
-  test report under the Right to Public Services Act in your state, or escalate via CPGRAMS.
+- **Rainwater harvesting where viable.** First-flush diverters + filtration brings rooftop water near
+  drinking standard in non-industrial areas. Many states subsidise installation.
+- **Report & demand testing.** You have a right to know what's in your tap water. File for a test
+  report under the Right to Public Services Act in your state, or escalate via CPGRAMS.
         """.strip()
     )
 
 
 def render_contaminant(key: str, info: dict) -> None:
-    with st.expander(f"{info['name']}  ({info['symbol']})", expanded=False):
+    with st.expander(f"{info['name']}  ·  {info['symbol']}", expanded=False):
         c1, c2 = st.columns(2)
         c1.metric("BIS acceptable (mg/L)", info["bis_acceptable_mg_l"])
         c2.metric("BIS permissible (mg/L)", info["bis_permissible_mg_l"])
 
-        st.markdown(f"**Origin.** {info['natural_origin']}")
+        st.markdown(f"**Origin** · {info['natural_origin']}")
 
         st.markdown(f"**{t('health_effects')}**")
         for h in info["health_effects"]:
@@ -65,64 +69,62 @@ def render_contaminant(key: str, info: dict) -> None:
 
 
 def schemes_section() -> None:
-    st.markdown("### 🏛️ National restoration & water-security programmes")
+    st.markdown("### National restoration & water-security programmes")
     schemes = load_schemes()
     for s in schemes["national"]:
         with st.expander(s["name"]):
-            st.markdown(f"**Ministry:** {s['ministry']}")
-            st.markdown(f"**Purpose.** {s['purpose']}")
-            st.markdown(f"**Applies to:** `{s['applies']}`")
+            st.markdown(f"**Ministry** · {s['ministry']}")
+            st.markdown(f"**Purpose** · {s['purpose']}")
+            st.markdown(f"**Applies to** · `{s['applies']}`")
             st.markdown(f"[Official portal →]({s['url']})")
     st.caption(f"Schemes snapshot: {schemes['_meta']['snapshot_date']} · Source: {schemes['_meta']['source']}")
 
 
 def main() -> None:
     lang = st.session_state.get("lang", "en")
-    st.title(f"🧪 {t('nav_contaminants', lang)}")
-    st.markdown(
-        "Each contaminant below has its **Bureau of Indian Standards (IS 10500:2012)** drinking-water "
-        "limit, its origin, the health effects from chronic exposure, what works at home, what works "
-        "at scheme level, and which government programmes target it."
+    st.markdown(f"# {t('nav_contaminants', lang)}")
+    st.caption(
+        "Each contaminant has its **BIS IS 10500:2012** drinking-water limit, its origin, the health "
+        "effects of chronic exposure, what works at home and at scheme level, and the government "
+        "programmes that target it."
     )
 
     contaminants = load_contaminants()
     order = ["arsenic", "fluoride", "uranium", "nitrate", "salinity", "iron", "microbial"]
 
-    user_contaminants = []
     state = st.session_state.get("state")
     district = st.session_state.get("district")
     if state:
-        from utils.data_loader import get_district_or_state_profile
-
         prof = get_district_or_state_profile(state, district)
         user_contaminants = prof.get("primary_contaminants", [])
         if user_contaminants:
             location_label = f"{district + ', ' if district else ''}{state}"
             st.success(
-                f"📍 **For {location_label}, the snapshot flags:** "
+                f"For **{location_label}**, the snapshot flags: "
                 + ", ".join(user_contaminants)
-                + ". The relevant entries are listed first below."
+                + ". Their entries are listed first below.",
+                icon=":material/place:",
             )
             order = [c for c in user_contaminants if c in contaminants] + [
                 c for c in order if c not in user_contaminants
             ]
 
-    st.markdown("---")
+    st.divider()
     st.markdown(f"### {t('bis_limits', lang)} & treatment by contaminant")
     for key in order:
         info = contaminants.get(key)
         if info:
             render_contaminant(key, info)
 
-    st.markdown("---")
+    st.divider()
     best_practices_section()
 
-    st.markdown("---")
+    st.divider()
     schemes_section()
 
-    st.markdown("---")
+    st.divider()
     st.caption(
-        f"Data source: {contaminants['_meta']['source']} · "
+        f"Data source: {contaminants['_meta']['source']}  ·  "
         f"Snapshot date: {contaminants['_meta']['snapshot_date']}"
     )
 

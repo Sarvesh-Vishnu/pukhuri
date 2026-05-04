@@ -5,7 +5,6 @@ import folium
 import pandas as pd
 import streamlit as st
 from folium.plugins import MarkerCluster
-from streamlit_folium import st_folium
 
 from utils.data_loader import (
     GW_CATEGORY_COLOR,
@@ -18,13 +17,11 @@ from utils.data_loader import (
     load_states,
     nearest_data_centres,
 )
+from utils.theme import init_page, render_map
 
-st.set_page_config(
-    page_title="Groundwater & Demand — Pukhuri", page_icon="📉", layout="wide"
-)
+init_page(title="Groundwater & Demand", icon="📉")
 
-# Sectoral water demand split (NITI Aayog CWMI / Min. of Jal Shakti basin reports).
-# India is irrigation-dominant — context matters for any household-side conservation talk.
+# India water demand split — NITI Aayog CWMI / Min. of Jal Shakti basin reports.
 SECTORAL_DEMAND = pd.DataFrame(
     {
         "sector": ["Irrigation", "Domestic", "Industrial", "Energy & power", "Other"],
@@ -52,13 +49,14 @@ def stress_map(focus_state: str | None) -> folium.Map:
             continue
         radius = max(8.0, min(28.0, float(r["stage_of_extraction_pct"]) / 6.0))
         color = r.get("color") or "#999999"
+        notes = r.get("notes", "") if not pd.isna(r.get("notes", "")) else ""
         popup = folium.Popup(
             f"""
             <div style='font-family:sans-serif;font-size:13px;width:240px'>
               <b>{r['state']}</b><br>
               Stage of GW extraction: <b>{int(r['stage_of_extraction_pct'])}%</b><br>
               Category: <b style='color:{color}'>{r['category']}</b><br>
-              <span style='color:#555'>{r.get('notes', '') if not pd.isna(r.get('notes', '')) else ''}</span>
+              <span style='color:#555'>{notes}</span>
             </div>
             """,
             max_width=260,
@@ -181,7 +179,7 @@ def neighbour_dc_panel() -> None:
     state = st.session_state.get("state")
     district = st.session_state.get("district")
     if not state:
-        st.info("👈 Pick a state (and optionally district) in the sidebar to see your nearest data centres.")
+        st.info("Pick a state in the sidebar to see your nearest data centres.", icon=":material/place:")
         return
 
     profile = get_district_or_state_profile(state, district)
@@ -194,7 +192,7 @@ def neighbour_dc_panel() -> None:
         return
 
     title = f"{district + ', ' if district else ''}{state}"
-    st.markdown(f"#### 🖥️ Data centres nearest to {title}")
+    st.markdown(f"### Data centres nearest to {title}")
     for _, d in near.iterrows():
         water_lpd = estimated_dc_water_l_per_day(d.get("it_load_mw"))
         water_str = f"~**{water_lpd/1_000_000:.2f} ML/day**" if water_lpd else "—"
@@ -216,10 +214,10 @@ def neighbour_dc_panel() -> None:
 
 
 def sectoral_demand_panel() -> None:
-    st.markdown("#### India's water demand split")
+    st.markdown("### India's water demand split")
     st.caption("Annual share of total water withdrawal — NITI Aayog CWMI / Min. of Jal Shakti basin reports.")
     chart_df = SECTORAL_DEMAND.set_index("sector")
-    st.bar_chart(chart_df, height=240, use_container_width=True)
+    st.bar_chart(chart_df, height=240, use_container_width=True, color="#0284c7")
     st.markdown(
         "- **Irrigation absorbs ~78%** of all water withdrawn — most efficiency gains have to come from "
         "the agricultural side (drip/sprinkler under PMKSY, crop diversification away from paddy in Punjab/Haryana).\n"
@@ -231,17 +229,17 @@ def sectoral_demand_panel() -> None:
 
 
 def main() -> None:
-    st.title("📉 Groundwater stress, reservoirs, data centres & demand")
+    st.markdown("# Groundwater stress, reservoirs, data centres & demand")
     st.caption(
-        "Three layers in one place: the CGWB groundwater stage of extraction (state-level), "
-        "the major reservoirs that buffer surface supply (CWC), and India's data-centre footprint "
-        "— much of which sits in the same water-stressed corridors."
+        "Three layers in one place: the CGWB groundwater stage of extraction (state-level), the major "
+        "reservoirs that buffer surface supply (CWC), and India's data-centre footprint — much of "
+        "which sits in the same water-stressed corridors."
     )
 
     state = st.session_state.get("state")
 
     tab_gw, tab_res_dc, tab_demand = st.tabs(
-        ["💧 Groundwater stress", "🏞️ Reservoirs & 🖥️ Data centres", "📊 Sectoral demand"]
+        ["Groundwater stress", "Reservoirs & Data centres", "Sectoral demand"]
     )
 
     with tab_gw:
@@ -249,28 +247,28 @@ def main() -> None:
             "CGWB classifies a block as **Over-Exploited** when annual extraction exceeds annual recharge "
             "(>100%), **Critical** at 90–100%, **Semi-Critical** at 70–90%, and **Safe** below 70%. "
             "Below is the state-level aggregate from the *Dynamic Ground Water Resources of India 2022* "
-            "assessment (CGWB, published 2023). District/block-level granularity is available in the source PDF."
+            "assessment (CGWB, published 2023). District/block-level granularity is in the source PDF."
         )
-        st_folium(stress_map(state), width=None, height=520, returned_objects=[])
+        render_map(stress_map(state), height=520)
         st.markdown("##### Ranked table")
         stress_table()
         st.caption(
-            "Source: CGWB *Dynamic Ground Water Resources of India 2022* (published 2023). "
-            "State averages can hide sharply-stressed districts (e.g. North Gujarat is critical even though "
-            "Gujarat's state-average is Safe). Use this as a directional indicator, not a verdict."
+            "Source: CGWB *Dynamic Ground Water Resources of India 2022*. State averages can hide "
+            "sharply-stressed districts (e.g. North Gujarat is critical even though Gujarat's average "
+            "is Safe). Use as a directional indicator, not a verdict."
         )
 
     with tab_res_dc:
         c1, c2 = st.columns(2)
         show_res = c1.checkbox("Show reservoirs (CWC)", value=True)
         show_dc = c2.checkbox("Show data centres", value=True)
-        st_folium(reservoirs_dc_map(state, show_res, show_dc), width=None, height=560, returned_objects=[])
+        render_map(reservoirs_dc_map(state, show_res, show_dc), height=560)
 
-        st.markdown("---")
+        st.divider()
         neighbour_dc_panel()
 
-        st.markdown("---")
-        with st.expander("📚 What's in these layers"):
+        st.divider()
+        with st.expander("What's in these layers", icon=":material/info:"):
             st.markdown(
                 """
 - **Reservoirs.** ~40 major reservoirs from the CWC weekly bulletin universe. We list each one's
@@ -278,10 +276,9 @@ def main() -> None:
   We deliberately do **not** snapshot live storage % — for current week numbers go straight to
   [CWC's bulletin](https://cwc.gov.in/) (published every Thursday).
 - **Data centres.** Operating + publicly-announced sites only (drawn from press releases, MeitY
-  notifications, and operator websites). Coordinates are city/area-level, not exact addresses.
-  IT-load (MW) is what operators publish; water draw is computed via the industry rule-of-thumb
-  ~1.8 L per kWh of IT energy. The actual range is 0.5–4 L/kWh depending on cooling. Treat as
-  order-of-magnitude only.
+  notifications, and operator websites). Coordinates are city/area-level. IT-load (MW) is what
+  operators publish; water draw is computed via the industry rule-of-thumb ~1.8 L per kWh of IT
+  energy. The actual range is 0.5–4 L/kWh depending on cooling. Treat as order-of-magnitude only.
 - **Why this overlay matters.** Hyderabad, Chennai, Bengaluru, Mumbai, Pune, and the Delhi-NCR
   belt account for ≈90% of India's data-centre capacity — and four of those six are in
   Critical/Over-Exploited groundwater regions, or import surface water from already-stressed
