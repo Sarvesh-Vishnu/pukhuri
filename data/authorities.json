@@ -1,0 +1,218 @@
+{
+  "_meta": {
+    "source": "State PHED / Water Supply Board public websites; Ministry of Jal Shakti — Department of Drinking Water and Sanitation; Ministry of Housing and Urban Affairs (AMRUT, urban water); CPGRAMS (pgportal.gov.in).",
+    "snapshot_date": "2024-01-01",
+    "note": "Verify the contact and portal before sending. State websites occasionally change URLs. CPGRAMS is the universal escalation route for any government grievance in India."
+  },
+  "national": {
+    "cpgrams": {
+      "name": "CPGRAMS (Centralised Public Grievance Redress and Monitoring System)",
+      "portal": "https://pgportal.gov.in/",
+      "applies_to": "Any central or state government grievance — universal escalation",
+      "languages": ["English", "Hindi"]
+    },
+    "rural_water": {
+      "name": "Department of Drinking Water & Sanitation, Ministry of Jal Shakti",
+      "portal": "https://jalshakti-ddws.gov.in/",
+      "jjm_dashboard": "https://ejalshakti.gov.in/jjmreport/JJMIndia.aspx",
+      "applies_to": "Rural piped water supply (Har Ghar Jal / Jal Jeevan Mission)"
+    },
+    "urban_water": {
+      "name": "Ministry of Housing & Urban Affairs (AMRUT 2.0)",
+      "portal": "https://amrut.mohua.gov.in/",
+      "applies_to": "Urban water supply schemes — implementation through ULBs / state water boards"
+    },
+    "groundwater": {
+      "name": "Central Ground Water Board (CGWB)",
+      "portal": "https://cgwb.gov.in/",
+      "applies_to": "Groundwater regulation, NOC for extraction, quality monitoring"
+    },
+    "pollution": {
+      "name": "Central Pollution Control Board (CPCB)",
+      "portal": "https://cpcb.nic.in/",
+      "applies_to": "Industrial discharge, surface water pollution, sewage treatment compliance"
+    }
+  },
+  "states": {
+    "Andhra Pradesh": {
+      "rural": {"name": "Rural Water Supply & Sanitation Department, AP", "portal": "https://rwss.ap.gov.in/"},
+      "urban": {"name": "AP Public Health & Municipal Engineering Dept", "portal": "https://municipaladmn.ap.gov.in/"},
+      "grievance": {"name": "AP Spandana", "portal": "https://spandana.ap.gov.in/"}
+    },
+    "Arunachal Pradesh": {
+      "rural": {"name": "Public Health Engineering Department, Arunachal Pradesh", "portal": "https://phed.arunachal.gov.in/"},
+      "urban": {"name": "Urban Development & Housing Dept, Arunachal Pradesh", "portal": "https://udhd.arunachal.gov.in/"},
+      "grievance": {"name": "CM Public Grievance Cell", "portal": "https://cmo.arunachal.gov.in/"}
+    },
+    "Assam": {
+      "rural": {"name": "Public Health Engineering Department, Assam", "portal": "https://phed.assam.gov.in/"},
+      "urban": {"name": "Guwahati Jal Board / Urban Development Dept", "portal": "https://gjb.assam.gov.in/"},
+      "grievance": {"name": "Assam Public Grievance", "portal": "https://cmo.assam.gov.in/grievance"}
+    },
+    "Bihar": {
+      "rural": {"name": "Public Health Engineering Department, Bihar", "portal": "https://phed.bih.nic.in/"},
+      "urban": {"name": "Bihar Urban Infrastructure Development Corp", "portal": "https://buidco.in/"},
+      "grievance": {"name": "Bihar Lok Shikayat (Right to Public Grievance Redressal Act)", "portal": "https://lokshikayat.bihar.gov.in/"}
+    },
+    "Chhattisgarh": {
+      "rural": {"name": "Public Health Engineering Department, Chhattisgarh", "portal": "https://phed.cg.gov.in/"},
+      "urban": {"name": "Urban Administration & Development Dept, CG", "portal": "https://uad.cg.gov.in/"},
+      "grievance": {"name": "Jandarshan / CM Helpline 1100", "portal": "https://cmhelpline.cg.gov.in/"}
+    },
+    "Delhi": {
+      "rural": {"name": "Delhi Jal Board (DJB)", "portal": "https://djb.delhi.gov.in/"},
+      "urban": {"name": "Delhi Jal Board (DJB)", "portal": "https://djb.delhi.gov.in/", "complaint_no": "1916"},
+      "grievance": {"name": "Delhi e-SLA / Public Grievance", "portal": "https://pgms.delhi.gov.in/"}
+    },
+    "Goa": {
+      "rural": {"name": "Public Works Department (Water Supply), Goa", "portal": "https://pwd.goa.gov.in/"},
+      "urban": {"name": "PWD Water Supply Division, Goa", "portal": "https://pwd.goa.gov.in/"},
+      "grievance": {"name": "Goa Public Grievance", "portal": "https://goa.gov.in/grievance/"}
+    },
+    "Gujarat": {
+      "rural": {"name": "Gujarat Water Supply & Sewerage Board (GWSSB)", "portal": "https://gwssb.gujarat.gov.in/"},
+      "urban": {"name": "Gujarat Urban Development Mission", "portal": "https://gudm.gujarat.gov.in/"},
+      "grievance": {"name": "Gujarat State Wide Attention on Grievances by Application of Technology (SWAGAT)", "portal": "https://swagat.gujarat.gov.in/"}
+    },
+    "Haryana": {
+      "rural": {"name": "Public Health Engineering Department, Haryana", "portal": "https://phedharyana.gov.in/"},
+      "urban": {"name": "Haryana Urban Local Bodies Department", "portal": "https://ulbharyana.gov.in/"},
+      "grievance": {"name": "Haryana CM Window", "portal": "https://cmharyanacell.nic.in/"}
+    },
+    "Himachal Pradesh": {
+      "rural": {"name": "Jal Shakti Vibhag, Himachal Pradesh", "portal": "https://hpiph.org/"},
+      "urban": {"name": "Jal Shakti Vibhag, HP", "portal": "https://hpiph.org/"},
+      "grievance": {"name": "HP CM Helpline 1100", "portal": "https://cmsewasankalp.hp.gov.in/"}
+    },
+    "Jharkhand": {
+      "rural": {"name": "Drinking Water & Sanitation Department, Jharkhand", "portal": "https://dwsdjharkhand.in/"},
+      "urban": {"name": "Urban Development & Housing Dept, Jharkhand", "portal": "https://udhd.jharkhand.gov.in/"},
+      "grievance": {"name": "Jharkhand CM Janta Darbar", "portal": "https://cm.jharkhand.gov.in/"}
+    },
+    "Karnataka": {
+      "rural": {"name": "Rural Development & Panchayat Raj Department, Karnataka", "portal": "https://rdpr.karnataka.gov.in/"},
+      "urban": {"name": "Bangalore Water Supply & Sewerage Board (BWSSB) / KUWS&DB", "portal": "https://bwssb.karnataka.gov.in/"},
+      "grievance": {"name": "Karnataka Janaspandana / Sakala", "portal": "https://sakala.karnataka.gov.in/"}
+    },
+    "Kerala": {
+      "rural": {"name": "Kerala Water Authority (KWA)", "portal": "https://kwa.kerala.gov.in/"},
+      "urban": {"name": "Kerala Water Authority (KWA)", "portal": "https://kwa.kerala.gov.in/"},
+      "grievance": {"name": "Kerala CM's Public Grievance Redressal", "portal": "https://cmo.kerala.gov.in/"}
+    },
+    "Madhya Pradesh": {
+      "rural": {"name": "Public Health Engineering Department, MP", "portal": "https://phed.mp.gov.in/"},
+      "urban": {"name": "Urban Administration & Development Department, MP", "portal": "https://mpurban.gov.in/"},
+      "grievance": {"name": "MP CM Helpline 181 / Samadhan Online", "portal": "https://samadhan.mp.gov.in/"}
+    },
+    "Maharashtra": {
+      "rural": {"name": "Maharashtra Jeevan Pradhikaran (MJP) / Water Supply & Sanitation Dept", "portal": "https://mjp.maharashtra.gov.in/"},
+      "urban": {"name": "Brihanmumbai Municipal Corp (Mumbai) / MJP for other ULBs", "portal": "https://portal.mcgm.gov.in/"},
+      "grievance": {"name": "Aaple Sarkar Maharashtra", "portal": "https://aaplesarkar.mahaonline.gov.in/"}
+    },
+    "Manipur": {
+      "rural": {"name": "Public Health Engineering Department, Manipur", "portal": "https://phedmanipur.gov.in/"},
+      "urban": {"name": "Municipal Administration, Housing & Urban Development, Manipur", "portal": "https://mahud.mn.gov.in/"},
+      "grievance": {"name": "Manipur CM Grievance Redressal", "portal": "https://manipur.gov.in/"}
+    },
+    "Meghalaya": {
+      "rural": {"name": "Public Health Engineering Department, Meghalaya", "portal": "https://megphed.gov.in/"},
+      "urban": {"name": "Urban Affairs Department, Meghalaya", "portal": "https://megurban.gov.in/"},
+      "grievance": {"name": "Meghalaya CM Grievance Cell", "portal": "https://meghalaya.gov.in/"}
+    },
+    "Mizoram": {
+      "rural": {"name": "Public Health Engineering Department, Mizoram", "portal": "https://phed.mizoram.gov.in/"},
+      "urban": {"name": "Urban Development & Poverty Alleviation, Mizoram", "portal": "https://udpa.mizoram.gov.in/"},
+      "grievance": {"name": "Mizoram CM Grievance", "portal": "https://mizoram.gov.in/"}
+    },
+    "Nagaland": {
+      "rural": {"name": "Public Health Engineering Department, Nagaland", "portal": "https://phed.nagaland.gov.in/"},
+      "urban": {"name": "Urban Development Department, Nagaland", "portal": "https://udd.nagaland.gov.in/"},
+      "grievance": {"name": "Nagaland CM Grievance Cell", "portal": "https://nagaland.gov.in/"}
+    },
+    "Odisha": {
+      "rural": {"name": "Rural Water Supply & Sanitation, Panchayati Raj & DW Department", "portal": "https://rwss.odisha.gov.in/"},
+      "urban": {"name": "Housing & Urban Development Department, Odisha", "portal": "https://urbanodisha.gov.in/"},
+      "grievance": {"name": "Mo Sarkar / Odisha CM Grievance", "portal": "https://cmgcodisha.gov.in/"}
+    },
+    "Punjab": {
+      "rural": {"name": "Department of Water Supply & Sanitation, Punjab", "portal": "https://dwss.punjab.gov.in/"},
+      "urban": {"name": "Punjab Water Supply & Sewerage Board (PWSSB)", "portal": "https://pwssb.punjab.gov.in/"},
+      "grievance": {"name": "Punjab Public Grievance Redressal", "portal": "https://connect.punjab.gov.in/"}
+    },
+    "Rajasthan": {
+      "rural": {"name": "Public Health Engineering Department, Rajasthan", "portal": "https://phedwater.rajasthan.gov.in/"},
+      "urban": {"name": "PHED Rajasthan (urban water also under PHED)", "portal": "https://phedwater.rajasthan.gov.in/"},
+      "grievance": {"name": "Rajasthan Sampark 181", "portal": "https://sampark.rajasthan.gov.in/"}
+    },
+    "Sikkim": {
+      "rural": {"name": "Water Security & Public Health Engineering Dept, Sikkim", "portal": "https://wsphed.sikkim.gov.in/"},
+      "urban": {"name": "Urban Development Department, Sikkim", "portal": "https://udd.sikkim.gov.in/"},
+      "grievance": {"name": "Sikkim CM Grievance Cell", "portal": "https://sikkim.gov.in/"}
+    },
+    "Tamil Nadu": {
+      "rural": {"name": "Tamil Nadu Water Supply & Drainage Board (TWAD)", "portal": "https://twadboard.tn.gov.in/"},
+      "urban": {"name": "Chennai Metropolitan Water Supply & Sewerage Board (Chennai); TWAD elsewhere", "portal": "https://chennaimetrowater.tn.gov.in/"},
+      "grievance": {"name": "Tamil Nadu CM Cell / Makkaludan Mudhalvar", "portal": "https://cmhelpline.tn.gov.in/"}
+    },
+    "Telangana": {
+      "rural": {"name": "Mission Bhagiratha (Rural Water Supply), Telangana", "portal": "https://rws.telangana.gov.in/"},
+      "urban": {"name": "Hyderabad Metropolitan Water Supply & Sewerage Board (HMWSSB)", "portal": "https://hyderabadwater.gov.in/"},
+      "grievance": {"name": "T-PRIDE / Praja Vani", "portal": "https://prajavani.telangana.gov.in/"}
+    },
+    "Tripura": {
+      "rural": {"name": "Drinking Water & Sanitation Department, Tripura", "portal": "https://dwstripura.gov.in/"},
+      "urban": {"name": "Urban Development Department, Tripura", "portal": "https://udd.tripura.gov.in/"},
+      "grievance": {"name": "Tripura CM Grievance Redressal", "portal": "https://tripura.gov.in/"}
+    },
+    "Uttar Pradesh": {
+      "rural": {"name": "UP Jal Nigam (Rural)", "portal": "https://upjn.org/"},
+      "urban": {"name": "UP Jal Nigam (Urban) / local Jal Sansthan", "portal": "https://upjn.org/"},
+      "grievance": {"name": "UP Jansunwai / IGRS", "portal": "https://jansunwai.up.nic.in/"}
+    },
+    "Uttarakhand": {
+      "rural": {"name": "Uttarakhand Jal Sansthan", "portal": "https://ujs.uk.gov.in/"},
+      "urban": {"name": "Uttarakhand Jal Sansthan", "portal": "https://ujs.uk.gov.in/"},
+      "grievance": {"name": "Uttarakhand CM Helpline 1905", "portal": "https://cmhelpline.uk.gov.in/"}
+    },
+    "West Bengal": {
+      "rural": {"name": "Public Health Engineering Department, West Bengal", "portal": "https://www.wbphed.gov.in/"},
+      "urban": {"name": "Kolkata Municipal Corp (Kolkata) / PHED for other ULBs", "portal": "https://www.kmcgov.in/"},
+      "grievance": {"name": "WB CM Grievance Cell", "portal": "https://wb.gov.in/"}
+    },
+    "Jammu and Kashmir": {
+      "rural": {"name": "Jal Shakti Department (PHE), J&K", "portal": "https://jalshakti.jk.gov.in/"},
+      "urban": {"name": "Jal Shakti Department, J&K", "portal": "https://jalshakti.jk.gov.in/"},
+      "grievance": {"name": "J&K Public Grievance Cell", "portal": "https://jkpgrams.gov.in/"}
+    },
+    "Ladakh": {
+      "rural": {"name": "PHE Department, Ladakh", "portal": "https://ladakh.gov.in/"},
+      "urban": {"name": "PHE Department, Ladakh", "portal": "https://ladakh.gov.in/"},
+      "grievance": {"name": "Ladakh Grievance Portal", "portal": "https://ladakh.gov.in/"}
+    },
+    "Puducherry": {
+      "rural": {"name": "PWD Water Resources, Puducherry", "portal": "https://pwd.py.gov.in/"},
+      "urban": {"name": "PWD Water Resources, Puducherry", "portal": "https://pwd.py.gov.in/"},
+      "grievance": {"name": "Puducherry CM Grievance", "portal": "https://py.gov.in/"}
+    },
+    "Chandigarh": {
+      "rural": {"name": "Municipal Corporation of Chandigarh (Public Health)", "portal": "https://mcchandigarh.gov.in/"},
+      "urban": {"name": "Municipal Corporation of Chandigarh", "portal": "https://mcchandigarh.gov.in/"},
+      "grievance": {"name": "Chandigarh Sampark", "portal": "https://sampark.chd.nic.in/"}
+    },
+    "Andaman and Nicobar Islands": {
+      "rural": {"name": "APWD Public Health Division", "portal": "https://apwd.andaman.gov.in/"},
+      "urban": {"name": "APWD Public Health Division", "portal": "https://apwd.andaman.gov.in/"},
+      "grievance": {"name": "A&N Administration Grievance Cell", "portal": "https://andaman.gov.in/"}
+    },
+    "Dadra and Nagar Haveli and Daman and Diu": {
+      "rural": {"name": "PWD Water Supply, DNH & DD", "portal": "https://ddd.gov.in/"},
+      "urban": {"name": "PWD Water Supply, DNH & DD", "portal": "https://ddd.gov.in/"},
+      "grievance": {"name": "DNH & DD Administration Grievance", "portal": "https://ddd.gov.in/"}
+    },
+    "Lakshadweep": {
+      "rural": {"name": "Lakshadweep PWD", "portal": "https://lakshadweep.gov.in/"},
+      "urban": {"name": "Lakshadweep PWD", "portal": "https://lakshadweep.gov.in/"},
+      "grievance": {"name": "Lakshadweep Administration Grievance", "portal": "https://lakshadweep.gov.in/"}
+    }
+  }
+}

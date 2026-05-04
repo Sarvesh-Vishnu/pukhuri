@@ -1,0 +1,71 @@
+{
+  "_meta": {
+    "source": "Ministry of Jal Shakti programme websites; CGWB; NITI Aayog Composite Water Management Index reports.",
+    "snapshot_date": "2024-01-01"
+  },
+  "national": [
+    {
+      "name": "Jal Jeevan Mission (JJM) — Har Ghar Jal",
+      "ministry": "Jal Shakti — Department of Drinking Water & Sanitation",
+      "purpose": "Functional Household Tap Connection (FHTC) to every rural household by 2024 (extended). Includes water quality remediation in priority habitations (arsenic, fluoride, iron, salinity, nitrate).",
+      "url": "https://jaljeevanmission.gov.in/",
+      "applies": "rural"
+    },
+    {
+      "name": "AMRUT 2.0 (Atal Mission for Rejuvenation and Urban Transformation)",
+      "ministry": "Housing & Urban Affairs",
+      "purpose": "Universal coverage of water supply in all statutory towns; sewerage/septage management; rejuvenation of urban water bodies.",
+      "url": "https://amrut.mohua.gov.in/",
+      "applies": "urban"
+    },
+    {
+      "name": "Atal Bhujal Yojana (ABHY)",
+      "ministry": "Jal Shakti",
+      "purpose": "Community-led, demand-side groundwater management in over-exploited blocks. Active in Gujarat, Haryana, Karnataka, MP, Maharashtra, Rajasthan, UP.",
+      "url": "https://ataljal.mowr.gov.in/",
+      "applies": "groundwater_stress"
+    },
+    {
+      "name": "Namami Gange Programme",
+      "ministry": "Jal Shakti — National Mission for Clean Ganga",
+      "purpose": "Clean Ganga and tributaries: sewage treatment, riverfront development, biodiversity, afforestation.",
+      "url": "https://nmcg.nic.in/",
+      "applies": "ganga_basin"
+    },
+    {
+      "name": "National River Conservation Plan (NRCP)",
+      "ministry": "Jal Shakti",
+      "purpose": "Pollution abatement of rivers other than Ganga across 16 states.",
+      "url": "https://nrcd.nic.in/",
+      "applies": "rivers"
+    },
+    {
+      "name": "Pradhan Mantri Krishi Sinchayee Yojana (PMKSY)",
+      "ministry": "Agriculture / Jal Shakti",
+      "purpose": "Per Drop More Crop, watershed development, micro-irrigation — reduces agricultural water demand.",
+      "url": "https://pmksy.gov.in/",
+      "applies": "agriculture"
+    },
+    {
+      "name": "Mission Amrit Sarovar",
+      "ministry": "Rural Development",
+      "purpose": "Develop/rejuvenate at least 75 water bodies (amrit sarovars) per district.",
+      "url": "https://amritsarovar.gov.in/",
+      "applies": "all_rural"
+    },
+    {
+      "name": "Swachh Bharat Mission (Grameen) Phase II",
+      "ministry": "Jal Shakti — DDWS",
+      "purpose": "ODF Plus, greywater management, faecal sludge management — reduces microbial contamination of water sources.",
+      "url": "https://swachhbharatmission.gov.in/",
+      "applies": "all_rural"
+    },
+    {
+      "name": "National Aquifer Mapping & Management Programme (NAQUIM)",
+      "ministry": "Jal Shakti — CGWB",
+      "purpose": "Aquifer-level characterisation and management plans across India.",
+      "url": "https://cgwb.gov.in/",
+      "applies": "groundwater"
+    }
+  ]
+}

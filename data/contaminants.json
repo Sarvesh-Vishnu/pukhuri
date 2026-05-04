@@ -1,0 +1,166 @@
+{
+  "_meta": {
+    "source": "Bureau of Indian Standards IS 10500:2012; CGWB Ground Water Year Book; WHO Guidelines for Drinking-water Quality (4th ed., 2017)",
+    "snapshot_date": "2024-01-01",
+    "note": "Permissible limits per BIS 10500:2012. Health effects summarised from WHO and ICMR guidance."
+  },
+  "fluoride": {
+    "name": "Fluoride",
+    "symbol": "F⁻",
+    "bis_acceptable_mg_l": 1.0,
+    "bis_permissible_mg_l": 1.5,
+    "natural_origin": "Leaching from fluoride-bearing rocks (granite, gneiss). Worsened by over-extraction of groundwater.",
+    "health_effects": [
+      "Dental fluorosis (mottled teeth) above 1.5 mg/L",
+      "Skeletal fluorosis (joint pain, bone deformity) with chronic exposure above 3 mg/L",
+      "Children most vulnerable"
+    ],
+    "treatment_household": [
+      "Activated alumina filters (Nalgonda technique scaled down)",
+      "Reverse osmosis (RO) — effective but wastes water and removes essential minerals",
+      "Bone-char or activated carbon (limited efficacy)"
+    ],
+    "treatment_community": [
+      "Nalgonda defluoridation technique (alum + lime)",
+      "Activated alumina community plants",
+      "Surface water blending where available"
+    ],
+    "restoration_programmes": ["National Water Quality Sub-Mission (NWQSM)", "Jal Jeevan Mission — fluoride priority habitations"]
+  },
+  "arsenic": {
+    "name": "Arsenic",
+    "symbol": "As",
+    "bis_acceptable_mg_l": 0.01,
+    "bis_permissible_mg_l": 0.05,
+    "natural_origin": "Reductive dissolution from alluvial sediments in Ganga–Brahmaputra basin. A geogenic contaminant, not industrial.",
+    "health_effects": [
+      "Arsenicosis: skin lesions, hyperpigmentation, keratosis",
+      "Group 1 carcinogen — skin, lung, bladder cancers",
+      "Cardiovascular and developmental effects"
+    ],
+    "treatment_household": [
+      "RO with arsenic-rated membrane",
+      "Activated alumina with iron coating",
+      "Nano-composite filters approved under Jal Jeevan Mission"
+    ],
+    "treatment_community": [
+      "Iron-removal + arsenic adsorption plants",
+      "Switching to surface water sources where feasible",
+      "Deep tubewells tapping arsenic-free aquifers (with monitoring)"
+    ],
+    "restoration_programmes": ["NWQSM Arsenic Mitigation", "Jal Jeevan Mission — arsenic-affected habitation priority", "State arsenic task forces (West Bengal, Bihar)"]
+  },
+  "nitrate": {
+    "name": "Nitrate",
+    "symbol": "NO₃⁻",
+    "bis_acceptable_mg_l": 45,
+    "bis_permissible_mg_l": 45,
+    "natural_origin": "Anthropogenic: agricultural fertiliser runoff, septic tanks, livestock waste. Not geogenic.",
+    "health_effects": [
+      "Methaemoglobinaemia (blue-baby syndrome) in infants under 6 months",
+      "Possible link to gastric cancer with chronic exposure",
+      "Pregnant women advised caution"
+    ],
+    "treatment_household": [
+      "RO (effective)",
+      "Ion-exchange resins",
+      "Boiling does NOT remove nitrate — it can concentrate it"
+    ],
+    "treatment_community": [
+      "Ion exchange plants",
+      "Biological denitrification (advanced)",
+      "Source protection: setback distances around wells, fertiliser regulation"
+    ],
+    "restoration_programmes": ["Atal Bhujal Yojana — demand-side groundwater management", "PM Pranam (balanced fertiliser use)"]
+  },
+  "iron": {
+    "name": "Iron",
+    "symbol": "Fe",
+    "bis_acceptable_mg_l": 0.3,
+    "bis_permissible_mg_l": 1.0,
+    "natural_origin": "Naturally occurring in groundwater across north-east India and laterite belts. Aesthetic and secondary health concern.",
+    "health_effects": [
+      "Generally not a primary health hazard at typical levels",
+      "Stains laundry, plumbing; metallic taste",
+      "Very high chronic intake linked to haemochromatosis in susceptible individuals"
+    ],
+    "treatment_household": [
+      "Aeration + sand filtration (low-cost, effective)",
+      "Iron removal filters using birm/manganese greensand",
+      "RO (overkill for iron alone)"
+    ],
+    "treatment_community": [
+      "Cascade aerators + rapid sand filters",
+      "Pressure iron-removal plants",
+      "Standard community treatment under JJM"
+    ],
+    "restoration_programmes": ["Jal Jeevan Mission — iron removal plants (IRP) for affected habitations"]
+  },
+  "salinity": {
+    "name": "Salinity (TDS / EC)",
+    "symbol": "TDS",
+    "bis_acceptable_mg_l": 500,
+    "bis_permissible_mg_l": 2000,
+    "natural_origin": "Coastal saline ingress, evaporite deposits in arid zones, over-extraction causing seawater intrusion.",
+    "health_effects": [
+      "High sodium load — hypertension risk",
+      "Gastrointestinal irritation at very high TDS",
+      "Generally aesthetic (taste) rather than acute toxicity"
+    ],
+    "treatment_household": [
+      "Reverse osmosis (only practical household option)",
+      "Distillation (energy-intensive)"
+    ],
+    "treatment_community": [
+      "Desalination plants (coastal)",
+      "Surface water transmission from non-saline sources",
+      "Managed aquifer recharge to push back saline interface"
+    ],
+    "restoration_programmes": ["Atal Bhujal Yojana", "Coastal Aquifer Management (CGWB)", "JJM coastal & arid priority"]
+  },
+  "uranium": {
+    "name": "Uranium",
+    "symbol": "U",
+    "bis_acceptable_mg_l": 0.03,
+    "bis_permissible_mg_l": 0.03,
+    "natural_origin": "Geogenic, leaching from uranium-bearing granites. Reported in Punjab, Haryana, Rajasthan, Andhra Pradesh, Telangana.",
+    "health_effects": [
+      "Chemical toxicity to kidneys (primary concern, not radioactivity at these levels)",
+      "Long-term low-dose exposure under study"
+    ],
+    "treatment_household": [
+      "RO (effective)",
+      "Ion-exchange (anion resin)"
+    ],
+    "treatment_community": [
+      "Ion-exchange plants",
+      "Coagulation–flocculation with ferric chloride",
+      "Switching source"
+    ],
+    "restoration_programmes": ["State uranium mapping (BARC + CGWB)", "JJM where notified"]
+  },
+  "microbial": {
+    "name": "Microbial (E. coli / coliform)",
+    "symbol": "MPN",
+    "bis_acceptable_mg_l": 0,
+    "bis_permissible_mg_l": 0,
+    "natural_origin": "Faecal contamination from septic tanks, open defecation, leaky sewers, surface runoff into shallow wells.",
+    "health_effects": [
+      "Diarrhoeal disease, cholera, typhoid, hepatitis A/E",
+      "Major cause of child mortality in India",
+      "Acute, immediate risk — unlike chemical contaminants"
+    ],
+    "treatment_household": [
+      "Boiling for 1 minute at rolling boil (most reliable)",
+      "Chlorination (bleaching powder, 1–2 mg/L residual)",
+      "UV purifiers (need clear water)",
+      "SODIS (solar disinfection in clear PET bottles, 6 hours)"
+    ],
+    "treatment_community": [
+      "Chlorination at source (gas or hypochlorite)",
+      "Slow sand filtration",
+      "Source protection: well-head sanitation, setback from latrines"
+    ],
+    "restoration_programmes": ["Swachh Bharat Mission — sanitation & open-defecation-free", "JJM water quality testing kits (FTKs)"]
+  }
+}
