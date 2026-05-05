@@ -11,11 +11,42 @@ which has Python 3.13 / serialization issues on Hugging Face Spaces.
 """
 from __future__ import annotations
 
+import base64
+import re
+from pathlib import Path
+
 import streamlit as st
 import streamlit.components.v1 as components
 
 from .data_loader import load_districts, load_states
 from .i18n import LANG_LABELS, t
+
+ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
+PHOTOS_DIR = ASSETS_DIR / "photos"
+
+
+def _flatten_html(s: str) -> str:
+    """Collapse multi-line indented HTML to a single line.
+
+    Streamlit's markdown treats lines indented by 4+ spaces as code blocks even when
+    `unsafe_allow_html=True` is set. Flattening keeps `<pre><code>` from being injected
+    around our hero / card markup.
+    """
+    return re.sub(r"\n\s*", "", s).strip()
+
+
+def _img_data_uri(path: Path) -> str | None:
+    """Read an image and return a base64 data URI, or None if missing."""
+    if not path.exists():
+        return None
+    suffix = path.suffix.lstrip(".").lower()
+    mime = "jpeg" if suffix in ("jpg", "jpeg") else suffix
+    return f"data:image/{mime};base64,{base64.b64encode(path.read_bytes()).decode()}"
+
+
+@st.cache_data(show_spinner=False)
+def _cached_img_uri(path_str: str) -> str | None:
+    return _img_data_uri(Path(path_str))
 
 # ---------------------------------------------------------------------------
 # CSS
@@ -50,6 +81,17 @@ code, pre, kbd { font-family: 'JetBrains Mono', ui-monospace, monospace !importa
 #MainMenu, footer, [data-testid="stStatusWidget"] { visibility: hidden; height: 0; }
 [data-testid="stToolbar"] { right: 0.5rem; }
 
+/* Streamlit's auto header/decoration reserve a chunk of space at the top —
+   hide them so the hero/title sits flush with the viewport. */
+[data-testid="stHeader"], header[data-testid="stHeader"] {
+    height: 0 !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    visibility: hidden !important;
+}
+[data-testid="stDecoration"] { display: none !important; }
+.stApp > header { height: 0 !important; }
+
 h1, h2, h3, h4 {
     font-weight: 600 !important;
     letter-spacing: -0.02em !important;
@@ -62,7 +104,7 @@ h3 { font-size: 1.15rem !important; }
 p, li { line-height: 1.65; }
 
 .block-container {
-    padding-top: 2.5rem !important;
+    padding-top: 1.25rem !important;
     padding-bottom: 4rem !important;
     max-width: 1200px;
 }
@@ -225,6 +267,51 @@ p, li { line-height: 1.65; }
     bottom: -40px;
     opacity: 0.18;
     pointer-events: none;
+}
+
+/* Photo hero — same shape as the SVG hero but with a real image background */
+.pukhuri-hero--photo {
+    background-size: cover !important;
+    background-position: center !important;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.pukhuri-hero--photo .hero-credit {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.78);
+}
+.pukhuri-hero--photo .hero-credit a {
+    color: rgba(255,255,255,0.95) !important;
+    text-decoration: underline;
+}
+
+/* Page-level photo banner (smaller than hero) */
+.pukhuri-page-photo {
+    background-size: cover;
+    background-position: center;
+    border-radius: 14px;
+    padding: 1.75rem 1.75rem 1.5rem 1.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border-color);
+    color: #ffffff;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.pukhuri-page-photo h1 {
+    color: #ffffff !important;
+    margin: 0 0 0.4rem 0 !important;
+    font-size: 1.85rem !important;
+}
+.pukhuri-page-photo .page-caption {
+    color: rgba(255,255,255,0.92) !important;
+    font-size: 0.95rem;
+    max-width: 760px;
+    line-height: 1.5;
 }
 
 /* Sidebar */
@@ -429,16 +516,14 @@ def render_map(fmap, *, height: int = 560) -> None:
 def feature_card(*, icon: str, title: str, body: str, page: str, link_label: str) -> None:
     """A clean feature card with a Material Symbols icon and a page link."""
     icon_html = f'<span class="material-symbols-outlined">{icon}</span>'
-    st.markdown(
-        f"""
-        <div class="pukhuri-card">
-            <div class="icon">{icon_html}</div>
-            <h3>{title}</h3>
-            <p>{body}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    html = (
+        '<div class="pukhuri-card">'
+        f'<div class="icon">{icon_html}</div>'
+        f'<h3>{title}</h3>'
+        f'<p>{body}</p>'
+        '</div>'
     )
+    st.markdown(html, unsafe_allow_html=True)
     st.page_link(page, label=link_label)
 
 
@@ -510,14 +595,51 @@ def illustration(key: str, *, height: int = 160) -> None:
     if not svg:
         return
     st.markdown(
-        f'<div style="height:{height}px;display:flex;align-items:center;justify-content:center;'
-        f'margin:0 0 1rem 0;">{svg}</div>',
+        _flatten_html(
+            f'<div style="height:{height}px;display:flex;align-items:center;'
+            f'justify-content:center;margin:0 0 1rem 0;">{svg}</div>'
+        ),
         unsafe_allow_html=True,
     )
 
 
-def page_header(title: str, *, illustration_key: str | None = None, caption: str | None = None) -> None:
-    """Consistent page header — title left, optional illustration right."""
+def page_header(
+    title: str,
+    *,
+    illustration_key: str | None = None,
+    caption: str | None = None,
+    photo: str | None = None,
+    photo_credit: str | None = None,
+    photo_credit_url: str | None = None,
+) -> None:
+    """Consistent page header.
+
+    Priority: photo (if `photo` resolves) > inline-SVG illustration > plain title.
+    """
+    photo_uri = _cached_img_uri(str(PHOTOS_DIR / photo)) if photo else None
+
+    if photo_uri:
+        bg = (
+            "linear-gradient(120deg, rgba(2,28,56,0.6) 0%, rgba(2,77,135,0.45) 100%), "
+            f"url('{photo_uri}')"
+        )
+        cap_html = f'<div class="page-caption">{caption}</div>' if caption else ""
+        html = (
+            f'<div class="pukhuri-page-photo" style="background-image:{bg};">'
+            f'<h1>{title}</h1>'
+            f'{cap_html}'
+            '</div>'
+        )
+        st.markdown(html, unsafe_allow_html=True)
+        if photo_credit:
+            credit = (
+                f"[{photo_credit}]({photo_credit_url})"
+                if photo_credit_url
+                else photo_credit
+            )
+            st.caption(f"Photo: {credit}")
+        return
+
     if illustration_key and illustration_key in ILLUSTRATIONS:
         c1, c2 = st.columns([3, 1])
         with c1:
@@ -526,8 +648,10 @@ def page_header(title: str, *, illustration_key: str | None = None, caption: str
                 st.caption(caption)
         with c2:
             st.markdown(
-                f'<div style="height:120px;display:flex;align-items:center;justify-content:flex-end;">'
-                f'{ILLUSTRATIONS[illustration_key]}</div>',
+                _flatten_html(
+                    f'<div style="height:120px;display:flex;align-items:center;'
+                    f'justify-content:flex-end;">{ILLUSTRATIONS[illustration_key]}</div>'
+                ),
                 unsafe_allow_html=True,
             )
     else:
@@ -536,36 +660,69 @@ def page_header(title: str, *, illustration_key: str | None = None, caption: str
             st.caption(caption)
 
 
-def hero(*, title: str, subtitle: str, badge: str | None = None) -> None:
-    """Decorative hero block with an inline-SVG water motif."""
-    badge_html = f'<div class="badge-row"><span class="pukhuri-badge">{badge}</span></div>' if badge else ""
-    art = """
-    <svg class="bg-art" width="380" height="380" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="dropG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0.4"/>
-        </linearGradient>
-      </defs>
-      <path d="M190 30 C 110 130, 70 200, 70 250 a120 120 0 0 0 240 0 C 310 200, 270 130, 190 30 Z"
-            fill="url(#dropG)"/>
-      <path d="M40 320 Q 95 295 150 320 T 260 320 T 360 320" stroke="#ffffff" stroke-width="3"
-            stroke-opacity="0.45" fill="none"/>
-      <path d="M20 350 Q 80 325 140 350 T 250 350 T 360 350" stroke="#ffffff" stroke-width="2"
-            stroke-opacity="0.3" fill="none"/>
-    </svg>
+def hero(
+    *,
+    title: str,
+    subtitle: str,
+    badge: str | None = None,
+    photo: str | None = "hero.jpg",
+    photo_credit: str | None = None,
+    photo_credit_url: str | None = None,
+) -> None:
+    """Decorative hero block.
+
+    If `photo` resolves to an existing file in `assets/photos/`, render with that as a
+    full-bleed background; otherwise fall back to the inline SVG water motif.
     """
-    st.markdown(
-        f"""
-        <div class="pukhuri-hero">
-            {art}
-            <h1>{title}</h1>
-            <div class="subtitle">{subtitle}</div>
-            {badge_html}
-        </div>
-        """,
-        unsafe_allow_html=True,
+    badge_html = (
+        f'<div class="badge-row"><span class="pukhuri-badge">{badge}</span></div>'
+        if badge
+        else ""
     )
+    photo_uri = _cached_img_uri(str(PHOTOS_DIR / photo)) if photo else None
+
+    if photo_uri:
+        credit_html = ""
+        if photo_credit:
+            credit_inner = (
+                f'<a href="{photo_credit_url}" target="_blank" rel="noopener">{photo_credit}</a>'
+                if photo_credit_url
+                else photo_credit
+            )
+            credit_html = f'<div class="hero-credit">Photo: {credit_inner}</div>'
+        bg = (
+            "linear-gradient(135deg, rgba(2,28,56,0.62) 0%, rgba(2,77,135,0.55) 100%), "
+            f"url('{photo_uri}')"
+        )
+        html = (
+            f'<div class="pukhuri-hero pukhuri-hero--photo" style="background-image:{bg};">'
+            f'<h1>{title}</h1>'
+            f'<div class="subtitle">{subtitle}</div>'
+            f'{badge_html}'
+            f'{credit_html}'
+            '</div>'
+        )
+    else:
+        art = (
+            '<svg class="bg-art" width="380" height="380" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">'
+            '<defs><linearGradient id="dropG" x1="0" y1="0" x2="0" y2="1">'
+            '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>'
+            '<stop offset="100%" stop-color="#ffffff" stop-opacity="0.4"/>'
+            '</linearGradient></defs>'
+            '<path d="M190 30 C 110 130, 70 200, 70 250 a120 120 0 0 0 240 0 C 310 200, 270 130, 190 30 Z" fill="url(#dropG)"/>'
+            '<path d="M40 320 Q 95 295 150 320 T 260 320 T 360 320" stroke="#ffffff" stroke-width="3" stroke-opacity="0.45" fill="none"/>'
+            '<path d="M20 350 Q 80 325 140 350 T 250 350 T 360 350" stroke="#ffffff" stroke-width="2" stroke-opacity="0.3" fill="none"/>'
+            '</svg>'
+        )
+        html = (
+            '<div class="pukhuri-hero">'
+            f'{art}'
+            f'<h1>{title}</h1>'
+            f'<div class="subtitle">{subtitle}</div>'
+            f'{badge_html}'
+            '</div>'
+        )
+    st.markdown(html, unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -580,7 +737,16 @@ def _init_state() -> None:
 
 
 def _sync_from_query_params() -> None:
-    """Allow `?state=...&district=...&lang=...&dark=1` deep-links."""
+    """Read `?state=&district=&lang=&dark=` deep-links into session state.
+
+    Runs **once per session** (guarded by `_qp_synced`). After that, session state
+    is the source of truth — otherwise toggles get clobbered on rerun by the URL
+    that we ourselves last pushed there.
+    """
+    if st.session_state.get("_qp_synced"):
+        return
+    st.session_state["_qp_synced"] = True
+
     qp = st.query_params
     if "state" in qp and not st.session_state.get("state"):
         st.session_state["state"] = qp.get("state")

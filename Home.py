@@ -20,6 +20,9 @@ def main() -> None:
             "grievance routing — built on public CGWB, CPCB, BIS, and CWC data."
         ),
         badge="Snapshot · 2024",
+        photo="hero.jpg",
+        photo_credit="Shubham Thakur (Pexels)",
+        photo_credit_url="https://www.pexels.com/@shubhamthakur/",
     )
 
     section_banner(

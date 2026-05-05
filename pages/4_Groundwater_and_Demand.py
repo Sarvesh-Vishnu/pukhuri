@@ -7,10 +7,13 @@ import streamlit as st
 from folium.plugins import MarkerCluster
 
 from utils.data_loader import (
+    CPCB_PRIORITY_COLOR,
+    CPCB_PRIORITY_LABEL,
     GW_CATEGORY_COLOR,
     estimated_dc_water_l_per_day,
     get_district_groundwater,
     get_district_or_state_profile,
+    load_cpcb_river_stretches,
     load_data_centres,
     load_district_groundwater_stress,
     load_districts,
@@ -230,6 +233,131 @@ def sectoral_demand_panel() -> None:
     )
 
 
+def cpcb_map(focus_state: str | None) -> folium.Map:
+    """Map of CPCB polluted river stretches, sized + coloured by priority class."""
+    df = load_cpcb_river_stretches()
+    center, zoom = (22.0, 80.0), 5
+    if focus_state:
+        sub = df[df.state == focus_state]
+        if not sub.empty:
+            center = (sub["lat"].mean(), sub["lon"].mean())
+            zoom = 7
+
+    m = folium.Map(location=center, zoom_start=zoom, tiles="cartodbpositron", control_scale=True)
+
+    for _, r in df.iterrows():
+        # Marker radius: bigger = worse (Priority I biggest)
+        radius = 10 + (5 - int(r["priority_class"])) * 3
+        popup_html = (
+            f"<div style='font-family:sans-serif;font-size:13px;width:240px'>"
+            f"<b>{r['river']}</b><br>"
+            f"<i>{r['stretch']}</i> · {r['state']}<br>"
+            f"Priority: <b style='color:{r['color']}'>{r['priority_label']}</b><br>"
+            f"Typical BOD: <b>{r['bod_typical_mg_l']} mg/L</b><br>"
+            f"<span style='color:#555'>{r.get('notes', '')}</span>"
+            f"</div>"
+        )
+        folium.CircleMarker(
+            location=(r["lat"], r["lon"]),
+            radius=radius,
+            color=r["color"],
+            fill=True,
+            fill_color=r["color"],
+            fill_opacity=0.7,
+            weight=1,
+            popup=folium.Popup(popup_html, max_width=260),
+            tooltip=f"{r['river']} · {r['stretch']} ({r['priority_label']})",
+        ).add_to(m)
+
+    legend = (
+        '<div style="position:fixed;bottom:20px;left:20px;z-index:9999;'
+        'background:rgba(255,255,255,0.92);padding:10px 14px;border-radius:8px;'
+        'border:1px solid #ccc;font-size:12px;font-family:sans-serif">'
+        '<b>CPCB stretch priority (BOD-based)</b><br>'
+        '<span style="color:#7e1f86">●</span> I — &gt; 30 mg/L &nbsp;'
+        '<span style="color:#d62728">●</span> II — 20–30<br>'
+        '<span style="color:#ff7f0e">●</span> III — 10–20 &nbsp;'
+        '<span style="color:#fbbf24">●</span> IV — 6–10 &nbsp;'
+        '<span style="color:#a3a3a3">●</span> V — 3–6<br>'
+        '<i>Marker size scales with severity</i>'
+        '</div>'
+    )
+    m.get_root().html.add_child(folium.Element(legend))
+    return m
+
+
+def cpcb_rivers_panel(focus_state: str | None) -> None:
+    df = load_cpcb_river_stretches()
+    st.markdown(
+        "The CPCB monitors river-water quality at ~4,500 stations and publishes a list of "
+        "**polluted stretches** ranked by BOD (organic pollution). Below: ~30 of the most "
+        "documented stretches across India. Priority I is the worst — Mithi (Mumbai), Yamuna "
+        "(Delhi), Sabarmati (Ahmedabad), Cooum (Chennai), Musi (Hyderabad), Bandi (Pali) all "
+        "sit there. The full CPCB list runs to 311 stretches."
+    )
+    n_p1 = (df["priority_class"] == 1).sum()
+    n_p2 = (df["priority_class"] == 2).sum()
+    n_p3 = (df["priority_class"] == 3).sum()
+    n_p4_5 = (df["priority_class"] >= 4).sum()
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Priority I (worst)", n_p1)
+    c2.metric("Priority II", n_p2)
+    c3.metric("Priority III", n_p3)
+    c4.metric("Priority IV–V", n_p4_5)
+
+    render_map(cpcb_map(focus_state), height=520)
+
+    if focus_state:
+        sub = df[df.state == focus_state]
+        if not sub.empty:
+            st.markdown(f"#### Stretches in {focus_state}")
+            st.dataframe(
+                sub[["river", "stretch", "priority_label", "bod_typical_mg_l", "notes"]].rename(
+                    columns={
+                        "river": "River",
+                        "stretch": "Stretch",
+                        "priority_label": "Priority",
+                        "bod_typical_mg_l": "Typical BOD (mg/L)",
+                        "notes": "Notes",
+                    }
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+    with st.expander("Full snapshot — all stretches", icon=":material/expand_more:"):
+        show = df[["river", "stretch", "state", "priority_label", "bod_typical_mg_l", "notes"]].rename(
+            columns={
+                "river": "River",
+                "stretch": "Stretch",
+                "state": "State",
+                "priority_label": "Priority",
+                "bod_typical_mg_l": "Typical BOD (mg/L)",
+                "notes": "Notes",
+            }
+        ).sort_values("Typical BOD (mg/L)", ascending=False)
+
+        def _row_style(row):
+            # Pick colour by priority label parsing, fallback grey
+            label = row["Priority"]
+            for pc, lbl in CPCB_PRIORITY_LABEL.items():
+                if lbl == label:
+                    return [f"background-color: {CPCB_PRIORITY_COLOR[pc]}22"] * len(row)
+            return [""] * len(row)
+
+        st.dataframe(
+            show.style.apply(_row_style, axis=1),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+    st.caption(
+        "Source: CPCB *Restoration of Polluted River Stretches* programme + state-PCB monitoring "
+        "bulletins. BOD figures are typical/representative — actual readings vary seasonally and "
+        "by station within a stretch. Priority class follows CPCB's classification."
+    )
+
+
 def district_gw_panel() -> None:
     """Show per-district stage of extraction when the user has a district selected."""
     state = st.session_state.get("state")
@@ -266,18 +394,26 @@ def district_gw_panel() -> None:
 def main() -> None:
     page_header(
         "Groundwater, reservoirs, data centres & demand",
+        photo="dam_cascade.jpg",
+        photo_credit="Dhilip Ananthakrishnan (Pexels)",
+        photo_credit_url="https://www.pexels.com/@dhilip-ananthakrishnan-2048683/",
         illustration_key="aquifer",
         caption=(
-            "Three layers: CGWB groundwater stage of extraction (state-level + ~60 documented districts), "
-            "major reservoirs that buffer surface supply (CWC), and India's data-centre footprint — much "
-            "of which sits in the same water-stressed corridors."
+            "Four layers in one place: CGWB groundwater stage of extraction (state + ~60 districts), "
+            "major reservoirs that buffer surface supply (CWC), India's data-centre footprint, and "
+            "CPCB polluted-river-stretches — many overlap geographically."
         ),
     )
 
     state = st.session_state.get("state")
 
-    tab_gw, tab_res_dc, tab_demand = st.tabs(
-        ["Groundwater stress", "Reservoirs & Data centres", "Sectoral demand"]
+    tab_gw, tab_res_dc, tab_rivers, tab_demand = st.tabs(
+        [
+            "Groundwater stress",
+            "Reservoirs & Data centres",
+            "Polluted rivers (CPCB)",
+            "Sectoral demand",
+        ]
     )
 
     with tab_gw:
@@ -346,6 +482,9 @@ def main() -> None:
   basins (Krishna, Cauvery, Yamuna).
                 """.strip()
             )
+
+    with tab_rivers:
+        cpcb_rivers_panel(state)
 
     with tab_demand:
         sectoral_demand_panel()

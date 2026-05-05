@@ -157,6 +157,9 @@ def render_profile(state: str, district: str | None) -> None:
 def main() -> None:
     page_header(
         "Map & Source",
+        photo="handpump.jpg",
+        photo_credit="Hamza Awan (Pexels)",
+        photo_credit_url="https://www.pexels.com/@themeditators/",
         illustration_key="handpump",
         caption=(
             "Markers cluster by zoom. Click a district to see its primary contaminants. "

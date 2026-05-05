@@ -18,6 +18,23 @@ GW_CATEGORY_COLOR = {
     "Over-Exploited": "#7e1f86",
 }
 
+# CPCB Polluted-River-Stretches priority classes (BOD-based).
+# Priority I worst (>30 mg/L), V cleanest (3–6 mg/L) of the listed stretches.
+CPCB_PRIORITY_COLOR = {
+    1: "#7e1f86",  # purple — most polluted
+    2: "#d62728",  # red
+    3: "#ff7f0e",  # orange
+    4: "#fbbf24",  # amber
+    5: "#a3a3a3",  # neutral
+}
+CPCB_PRIORITY_LABEL = {
+    1: "Priority I — BOD > 30 mg/L",
+    2: "Priority II — BOD 20–30 mg/L",
+    3: "Priority III — BOD 10–20 mg/L",
+    4: "Priority IV — BOD 6–10 mg/L",
+    5: "Priority V — BOD 3–6 mg/L",
+}
+
 # Industry rule-of-thumb water-use factor: hyperscale air-cooled DCs typically
 # consume ~1.8 L per kWh of IT energy (Uptime Institute / Lawrence Berkeley NL).
 # IT load (MW) × 24 h × 1.8 L/kWh = litres/day.
@@ -65,6 +82,14 @@ def load_groundwater_stress() -> pd.DataFrame:
 def load_district_groundwater_stress() -> pd.DataFrame:
     df = pd.read_csv(DATA_DIR / "district_groundwater_stress.csv")
     df["color"] = df["category"].map(GW_CATEGORY_COLOR).fillna("#999999")
+    return df
+
+
+@st.cache_data(show_spinner=False)
+def load_cpcb_river_stretches() -> pd.DataFrame:
+    df = pd.read_csv(DATA_DIR / "cpcb_river_stretches.csv")
+    df["color"] = df["priority_class"].map(CPCB_PRIORITY_COLOR).fillna("#999999")
+    df["priority_label"] = df["priority_class"].map(CPCB_PRIORITY_LABEL).fillna("Unclassified")
     return df
 
 
