@@ -9,15 +9,17 @@ from folium.plugins import MarkerCluster
 from utils.data_loader import (
     GW_CATEGORY_COLOR,
     estimated_dc_water_l_per_day,
+    get_district_groundwater,
     get_district_or_state_profile,
     load_data_centres,
+    load_district_groundwater_stress,
     load_districts,
     load_groundwater_stress,
     load_reservoirs,
     load_states,
     nearest_data_centres,
 )
-from utils.theme import init_page, render_map
+from utils.theme import init_page, page_header, render_map
 
 init_page(title="Groundwater & Demand", icon="📉")
 
@@ -228,12 +230,48 @@ def sectoral_demand_panel() -> None:
     )
 
 
+def district_gw_panel() -> None:
+    """Show per-district stage of extraction when the user has a district selected."""
+    state = st.session_state.get("state")
+    district = st.session_state.get("district")
+    if not state:
+        return
+    info = get_district_groundwater(state, district)
+    if not info:
+        return
+    if info["level"] == "district":
+        title = f"{info['district']}, {info['state']}"
+        category = info["category"]
+        color = info["color"]
+        with st.container(border=True):
+            c1, c2, c3 = st.columns([2, 1, 1])
+            c1.markdown(f"#### {title}")
+            c1.markdown(
+                f"<span class='pukhuri-badge' style='background:{color}22;color:{color};"
+                f"border-color:{color};'>{category}</span>",
+                unsafe_allow_html=True,
+            )
+            c2.metric("Stage of extraction", f"{int(info['stage_of_extraction_pct'])}%")
+            c3.metric("CGWB year", info["assessment_year"])
+            if info.get("notes"):
+                st.caption(info["notes"])
+    elif district:
+        st.info(
+            f"No district-level CGWB stage data for {district} in our snapshot — "
+            f"showing state-level for {state} below.",
+            icon=":material/info:",
+        )
+
+
 def main() -> None:
-    st.markdown("# Groundwater stress, reservoirs, data centres & demand")
-    st.caption(
-        "Three layers in one place: the CGWB groundwater stage of extraction (state-level), the major "
-        "reservoirs that buffer surface supply (CWC), and India's data-centre footprint — much of "
-        "which sits in the same water-stressed corridors."
+    page_header(
+        "Groundwater, reservoirs, data centres & demand",
+        illustration_key="aquifer",
+        caption=(
+            "Three layers: CGWB groundwater stage of extraction (state-level + ~60 documented districts), "
+            "major reservoirs that buffer surface supply (CWC), and India's data-centre footprint — much "
+            "of which sits in the same water-stressed corridors."
+        ),
     )
 
     state = st.session_state.get("state")
@@ -246,12 +284,35 @@ def main() -> None:
         st.markdown(
             "CGWB classifies a block as **Over-Exploited** when annual extraction exceeds annual recharge "
             "(>100%), **Critical** at 90–100%, **Semi-Critical** at 70–90%, and **Safe** below 70%. "
-            "Below is the state-level aggregate from the *Dynamic Ground Water Resources of India 2022* "
-            "assessment (CGWB, published 2023). District/block-level granularity is in the source PDF."
+            "Source: *Dynamic Ground Water Resources of India 2022* (CGWB, published 2023)."
         )
+
+        district_gw_panel()
+
         render_map(stress_map(state), height=520)
-        st.markdown("##### Ranked table")
+        st.markdown("##### Ranked table — state level")
         stress_table()
+        with st.expander("District-level snapshot (~60 documented districts)", icon=":material/expand_more:"):
+            ddf = load_district_groundwater_stress().sort_values("stage_of_extraction_pct", ascending=False)
+            show = ddf[["district", "state", "stage_of_extraction_pct", "category", "notes"]].rename(
+                columns={
+                    "district": "District",
+                    "state": "State",
+                    "stage_of_extraction_pct": "Stage of GW extraction (%)",
+                    "category": "CGWB category",
+                    "notes": "Notes",
+                }
+            )
+
+            def _row_style(row):
+                color = GW_CATEGORY_COLOR.get(row["CGWB category"], "#999999")
+                return [f"background-color: {color}22"] * len(row)
+
+            st.dataframe(
+                show.style.apply(_row_style, axis=1),
+                use_container_width=True,
+                hide_index=True,
+            )
         st.caption(
             "Source: CGWB *Dynamic Ground Water Resources of India 2022*. State averages can hide "
             "sharply-stressed districts (e.g. North Gujarat is critical even though Gujarat's average "

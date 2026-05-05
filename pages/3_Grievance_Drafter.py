@@ -10,9 +10,9 @@ from utils.data_loader import (
     load_districts,
     load_states,
 )
-from utils.grievance import ISSUE_TYPES, draft_complaint, route
+from utils.grievance import ISSUE_TYPES, draft_complaint, pdf_complaint, route
 from utils.i18n import t
-from utils.theme import init_page
+from utils.theme import illustration, init_page, page_header
 
 init_page(title="Grievance Drafter", icon="✍️")
 
@@ -46,11 +46,14 @@ def copy_button(text: str) -> None:
 
 def main() -> None:
     lang = st.session_state.get("lang", "en")
-    st.markdown(f"# {t('nav_grievance', lang)}")
-    st.caption(
-        "Tell us where you live, what the issue is, and a brief description. "
-        "We route to the right department for your state, draft a formal letter, and link to the "
-        "portal you should file it on. **We do not auto-submit** — the citizen always signs and files."
+    page_header(
+        t("nav_grievance", lang),
+        illustration_key="document",
+        caption=(
+            "Tell us where you live, what the issue is, and a brief description. "
+            "We route to the right department for your state, draft a formal letter, and link to the "
+            "portal you should file it on. We do not auto-submit — the citizen always signs and files."
+        ),
     )
 
     states_df = load_states()
@@ -173,8 +176,35 @@ def main() -> None:
         primary_authority=routing.primary_name,
     )
 
-    st.text_area("Complaint (editable before copying)", value=body, height=460, key="draft_text")
-    copy_button(body)
+    edited = st.text_area(
+        "Complaint (editable before copying / downloading)",
+        value=body,
+        height=460,
+        key="draft_text",
+    )
+
+    col_copy, col_pdf = st.columns([1, 1])
+    with col_copy:
+        copy_button(edited)
+    with col_pdf:
+        pdf_bytes = pdf_complaint(
+            body_text=edited,
+            primary_authority=routing.primary_name,
+            state=state,
+            district=district or "—",
+            issue_type=issue_key,
+            grievance_portal_name=routing.grievance_portal_name,
+            grievance_portal_url=routing.grievance_portal_url,
+        )
+        filename = f"pukhuri-complaint-{state.replace(' ', '-').lower()}.pdf"
+        st.download_button(
+            label=t("download_pdf", lang),
+            data=pdf_bytes,
+            file_name=filename,
+            mime="application/pdf",
+            type="secondary",
+            icon=":material/download:",
+        )
 
     st.caption(
         "After filing, save the grievance ID issued by the portal. If unresolved within the SLA "

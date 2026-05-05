@@ -6,34 +6,20 @@ from __future__ import annotations
 
 import streamlit as st
 
-from utils.theme import feature_card, init_page, section_banner
+from utils.theme import feature_card, hero, init_page, section_banner
 
 init_page(title="Home", icon="💧")
 
 
 def main() -> None:
-    col_title, col_meta = st.columns([3, 1])
-    with col_title:
-        st.markdown("# Pukhuri")
-        st.markdown(
-            "<p style='font-size:1.1rem;color:var(--text-secondary);margin-top:-0.4rem;'>"
-            "Know your water — India.</p>",
-            unsafe_allow_html=True,
-        )
-    with col_meta:
-        st.markdown(
-            "<div style='text-align:right;margin-top:0.5rem;'>"
-            "<span class='pukhuri-badge'>Snapshot · 2024</span></div>",
-            unsafe_allow_html=True,
-        )
-
-    st.markdown(
-        "<p style='font-size:1.05rem;color:var(--text-secondary);max-width:780px;'>"
-        "Where does your water come from? What's in it? Who do you talk to when something's wrong? "
-        "A district-level guide to India's drinking water — sources, contaminants, restoration, and "
-        "grievance routing — built on public CGWB, CPCB, BIS, and CWC data."
-        "</p>",
-        unsafe_allow_html=True,
+    hero(
+        title="Pukhuri",
+        subtitle=(
+            "Where does your water come from? What's in it? Who do you talk to when something's wrong? "
+            "A district-level guide to India's drinking water — sources, contaminants, restoration, and "
+            "grievance routing — built on public CGWB, CPCB, BIS, and CWC data."
+        ),
+        badge="Snapshot · 2024",
     )
 
     section_banner(
@@ -43,11 +29,11 @@ def main() -> None:
         "contact your local authority directly."
     )
 
-    # Feature grid — 2x2
+    # 2x2 feature grid
     col1, col2 = st.columns(2, gap="large")
     with col1:
         feature_card(
-            icon=":material/explore:",
+            icon="explore",
             title="Map & Source",
             body=(
                 "Pick your state and district to see your dominant water source, "
@@ -57,7 +43,7 @@ def main() -> None:
             link_label="Open the map",
         )
         feature_card(
-            icon=":material/science:",
+            icon="science",
             title="Contaminants & Restoration",
             body=(
                 "What fluoride, arsenic, nitrate, iron, salinity, uranium and microbial contamination "
@@ -68,7 +54,7 @@ def main() -> None:
         )
     with col2:
         feature_card(
-            icon=":material/trending_down:",
+            icon="trending_down",
             title="Groundwater, Reservoirs & Data Centres",
             body=(
                 "How stressed your state's groundwater is (CGWB), the reservoirs that buffer your supply (CWC), "
@@ -78,7 +64,7 @@ def main() -> None:
             link_label="See the stress map",
         )
         feature_card(
-            icon=":material/edit_note:",
+            icon="edit_note",
             title="Grievance Drafter",
             body=(
                 "Draft a formal water complaint to the right authority for your state — rural PHED, urban "
@@ -105,7 +91,7 @@ def main() -> None:
         """.strip()
     )
 
-    with st.expander("Data sources & snapshot date", icon=":material/library_books:"):
+    with st.expander("Data sources & snapshot date"):
         st.markdown(
             """
 - **Snapshot date:** 2024-01-01 (state/contaminants/authorities/districts).
@@ -139,7 +125,4 @@ Coordinates for districts, reservoirs, and data centres are approximate (distric
     )
 
 
-if __name__ == "__main__":
-    main()
-else:
-    main()
+main()

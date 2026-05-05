@@ -9,7 +9,7 @@ from utils.data_loader import (
     load_schemes,
 )
 from utils.i18n import t
-from utils.theme import init_page
+from utils.theme import init_page, page_header
 
 init_page(title="Contaminants & Restoration", icon="🧪")
 
@@ -82,11 +82,14 @@ def schemes_section() -> None:
 
 def main() -> None:
     lang = st.session_state.get("lang", "en")
-    st.markdown(f"# {t('nav_contaminants', lang)}")
-    st.caption(
-        "Each contaminant has its **BIS IS 10500:2012** drinking-water limit, its origin, the health "
-        "effects of chronic exposure, what works at home and at scheme level, and the government "
-        "programmes that target it."
+    page_header(
+        t("nav_contaminants", lang),
+        illustration_key="lab",
+        caption=(
+            "Each contaminant has its BIS IS 10500:2012 drinking-water limit, its origin, the health "
+            "effects of chronic exposure, what works at home and at scheme level, and the government "
+            "programmes that target it."
+        ),
     )
 
     contaminants = load_contaminants()

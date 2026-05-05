@@ -62,6 +62,51 @@ def load_groundwater_stress() -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
+def load_district_groundwater_stress() -> pd.DataFrame:
+    df = pd.read_csv(DATA_DIR / "district_groundwater_stress.csv")
+    df["color"] = df["category"].map(GW_CATEGORY_COLOR).fillna("#999999")
+    return df
+
+
+def get_district_groundwater(state: str, district: str | None) -> dict | None:
+    """Return per-district stage-of-extraction if we have it; else state-level fallback."""
+    if district:
+        ddf = load_district_groundwater_stress()
+        match = ddf[(ddf.state == state) & (ddf.district == district)]
+        if not match.empty:
+            r = match.iloc[0].to_dict()
+            r["level"] = "district"
+            return r
+    sdf = load_groundwater_stress()
+    match = sdf[sdf.state == state]
+    if not match.empty:
+        r = match.iloc[0].to_dict()
+        r["level"] = "state"
+        r["district"] = None
+        return r
+    return None
+
+
+@st.cache_data(show_spinner=False)
+def load_district_groundwater() -> pd.DataFrame:
+    df = pd.read_csv(DATA_DIR / "district_groundwater.csv")
+    df["color"] = df["category"].map(GW_CATEGORY_COLOR).fillna("#999999")
+    return df
+
+
+def get_district_groundwater_category(state: str, district: str | None) -> dict | None:
+    """Return {category, notes, color} for the (state, district) if known, else None."""
+    if not district:
+        return None
+    df = load_district_groundwater()
+    row = df[(df.state == state) & (df.district == district)]
+    if row.empty:
+        return None
+    r = row.iloc[0]
+    return {"category": r["category"], "notes": r.get("notes", ""), "color": r["color"]}
+
+
+@st.cache_data(show_spinner=False)
 def load_reservoirs() -> pd.DataFrame:
     df = pd.read_csv(DATA_DIR / "reservoirs.csv")
     df["purpose"] = df["purpose"].fillna("").apply(_split_semis)

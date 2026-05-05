@@ -13,7 +13,7 @@ from utils.data_loader import (
     load_states,
 )
 from utils.i18n import t
-from utils.theme import init_page, render_map
+from utils.theme import init_page, page_header, render_map
 
 init_page(title="Map & Source", icon="🗺️")
 
@@ -155,10 +155,14 @@ def render_profile(state: str, district: str | None) -> None:
 
 
 def main() -> None:
-    st.markdown("# Map & Source")
-    st.caption(
-        "Markers cluster by zoom. Click a district to see its primary contaminants. "
-        "Pick a state and district from the sidebar for the detailed profile below."
+    page_header(
+        "Map & Source",
+        illustration_key="handpump",
+        caption=(
+            "Markers cluster by zoom. Click a district to see its primary contaminants. "
+            "Pick a state and district from the sidebar for the detailed profile below. "
+            "Tip: your selection is in the URL — share the link to share the location."
+        ),
     )
 
     districts_df = load_districts()
