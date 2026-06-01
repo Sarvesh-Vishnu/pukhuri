@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Water on Paper — the distance between the right to water and the reach of it</title>
+<meta name="description" content="A companion to the article Water on Paper: how water access works on paper, how far reality sits from it, and what we can do to close the gap — from the global picture to India, and the honest reckoning of building with AI." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Spline+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- top bar -->
+<header class="topbar">
+  <a href="#top" class="brand">
+    <span>Water<span class="on" style="font-style:italic"> on </span>Paper</span>
+    <span class="sub">companion</span>
+  </a>
+  <button class="menu-btn" id="menu-open">Chapters</button>
+</header>
+
+<!-- chapter drawer -->
+<div class="drawer" id="drawer">
+  <div class="drawer-panel">
+    <button class="drawer-close" id="menu-close" aria-label="close">&times;</button>
+    <span class="kicker">Water on Paper — contents</span>
+    <a class="toc-item" href="#ch01"><span class="n">01</span><span class="t">A blue planet, mostly out of reach</span></a>
+    <a class="toc-item" href="#ch02"><span class="n">02</span><span class="t">On paper</span></a>
+    <a class="toc-item" href="#ch03"><span class="n">03</span><span class="t">The line nobody draws on a map</span></a>
+    <a class="toc-item" href="#ch04"><span class="n">04</span><span class="t">India, drawn by its water</span></a>
+    <a class="toc-item" href="#ch05"><span class="n">05</span><span class="t">When the pipe betrays you</span></a>
+    <a class="toc-item" href="#ch06"><span class="n">06</span><span class="t">Neer — know your water</span></a>
+    <a class="toc-item" href="#ch07"><span class="n">07</span><span class="t">The dilemma I'm writing inside</span></a>
+    <a class="toc-item" href="#ch08"><span class="n">08</span><span class="t">Closing the gap</span></a>
+  </div>
+</div>
+
+<main class="wrap" id="top">
+
+  <!-- ============ 00 · HERO ============ -->
+  <section class="chapter hero" data-screen-label="Hero">
+    <div class="waterlines" aria-hidden="true">
+      <i style="top:18%"></i><i style="top:34%"></i><i style="top:51%"></i><i style="top:69%"></i><i style="top:86%"></i>
+    </div>
+    <div class="inner">
+      <p class="kicker" data-reveal>A companion to the article</p>
+      <h1 class="display hero-title" data-reveal data-reveal-d="1">Water<br><span class="on">on</span> Paper</h1>
+      <div class="hero-sub">
+        <p class="l" data-reveal data-reveal-d="2">Every country has promised its people water. The promise is written down — in constitutions, missions, and master plans. This is about the <em class="ital">distance</em> between what the paper says and what comes out of the tap, told from the world to a village, and back to the screen you're reading this on.</p>
+        <p class="note" data-reveal data-reveal-d="3" style="align-self:flex-end">Global → India<br>↓ scroll to begin</p>
+      </div>
+    </div>
+    <div class="scroll-cue"><span class="dot"></span> begin</div>
+  </section>
+
+  <!-- ============ 01 · EARTH'S WATER ============ -->
+  <section class="chapter" id="ch01" data-screen-label="01 Earth's water">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" data-reveal>01 — A blue planet, mostly out of reach</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">We call it the blue planet. We're describing water we can't drink.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">Picture all the water on Earth as a hundred drops.</p>
+      </div>
+
+      <div class="col" data-reveal>
+        <div class="dotgrid" id="earth-dots" aria-hidden="true"></div>
+        <div class="legend">
+          <span><i style="background:var(--paper-edge)"></i> Saltwater &amp; ice — 97.5%</span>
+          <span><i style="background:var(--water)"></i> Freshwater — 2.5%</span>
+          <span><i style="background:var(--clay)"></i> Liquid, surface, reachable — ~0.5%</span>
+        </div>
+      </div>
+
+      <div class="col" style="margin-top:48px">
+        <p class="body" data-reveal>Of every hundred drops, fewer than three are fresh. Most of those are frozen in ice or buried too deep to lift. <strong>Barely one drop</strong> — the rivers, lakes and shallow groundwater that almost everyone alive actually uses — carries the entire human enterprise.<sup class="src" title="Only ~2.5% of Earth's water is freshwater; ~0.5% is accessible, liquid surface water. EESI; USGS.">JMP·USGS</sup></p>
+        <p class="body" data-reveal>Scarcity isn't the surprising part. The surprising part is how good we've gotten at <em class="ital">writing</em> as if that one drop were evenly poured — one promise per person, signed and filed. They are not. Where you are born decides how many drops reach you, and whether they're safe when they arrive.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ============ 02 · ON PAPER (thesis) ============ -->
+  <section class="chapter" id="ch02" data-screen-label="02 On Paper">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" data-reveal>02 — The idea this whole thing rests on</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">On paper, everyone already has water.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">In 2010 the UN recognised water as a <span class="serif-em">human right</span>. Most nations enshrine it. India is wiring a tap into every rural home. The plans are real, ambitious, and beautifully written. The gap between them and a glass you'd let a child drink is the subject of everything that follows.</p>
+      </div>
+
+      <div class="paper-real">
+        <div class="pr-card paper" data-reveal>
+          <span class="tag">What the page says</span>
+          <h4>The right to water</h4>
+          <ul>
+            <li><span class="mk">§</span> A safe, sufficient, accessible supply for every household.</li>
+            <li><span class="mk">§</span> 55 litres per person per day, piped to the home.</li>
+            <li><span class="mk">§</span> Tested water, published quality, a number to call.</li>
+            <li><span class="mk">§</span> Plans, budgets, dashboards, deadlines — all filed.</li>
+          </ul>
+        </div>
+        <div class="pr-card real" data-reveal data-reveal-d="1">
+          <span class="tag">What the tap does</span>
+          <h4>The reach of it</h4>
+          <ul>
+            <li><span class="mk">→</span> A connection that runs an hour every third day.</li>
+            <li><span class="mk">→</span> Clear water that quietly carries arsenic or fluoride.</li>
+            <li><span class="mk">→</span> A test that was never done, or never shared.</li>
+            <li><span class="mk">→</span> A pipe that was laid beside a sewer.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col" style="margin-top:56px">
+        <p class="pull" data-reveal>The work isn't to mock the paper.<br>It's to <span class="em">close the distance</span> between the paper and the pipe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 · GLOBAL DIVIDE ============ -->
+  <section class="chapter dark" id="ch03" data-screen-label="03 Global divide">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" style="color:oklch(0.78 0.09 230)" data-reveal>03 — The line nobody draws on a map</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">Two billion people live on the wrong side of a promise.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">Not in one region — everywhere the paper outran the plumbing.</p>
+      </div>
+
+      <div class="col" data-reveal>
+        <div class="barchart" id="global-bars"></div>
+        <p class="note" style="margin-top:22px">Each bar is people, not percentages of a budget. Safely managed = water on premises, available when needed, free of contamination.<sup class="src" title="WHO/UNICEF Joint Monitoring Programme, 2023.">JMP 2023</sup></p>
+      </div>
+
+      <div style="margin-top:72px" data-reveal>
+        <h3 style="color:oklch(0.82 0.09 230)">Ten countries on the wrong side of the line.</h3>
+        <p class="note" style="max-width:60ch; margin-bottom:30px">A deliberate spread — Middle-Eastern aquifers run dry, Asian giants outgrow their rivers, and across Sub-Saharan Africa the barrier is distance, not scarcity. India sits in company, not isolation. Choose a country.</p>
+
+        <div class="countries">
+          <div class="clist" id="country-list" role="list" aria-label="Most water-affected countries"></div>
+          <div class="cdetail" id="country-detail" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div class="col" style="margin-top:52px">
+        <p class="body" data-reveal>The burden isn't shared evenly even within a household. Where water has to be fetched, it is overwhelmingly women and girls who walk for it — hours a day that don't appear in any plan, subtracted from school and work and rest.</p>
+        <p class="body" data-reveal>The global numbers are the wide shot. To see how the gap actually behaves — how a country can pour billions into pipes and still bury people who drank from them — we go to the place with the most people, the least margin, and the most water written down. India.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 · INDIA FOCUS ============ -->
+  <section class="chapter" id="ch04" data-screen-label="04 India focus">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" data-reveal>04 — India, drawn by its water</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">18% of the world's people. 4% of its fresh water.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">India is the planet's largest user of groundwater — and it is spending the savings faster than the rain replaces them.<sup class="src" title="CGWB; widely cited figures on India's share of population vs freshwater and groundwater extraction.">CGWB</sup></p>
+      </div>
+
+      <div class="statrow" style="margin-bottom:64px">
+        <div class="bigstat" data-reveal>
+          <span class="num water" data-count="600" data-suf="M" data-dur="1800">0</span>
+          <span class="lbl">people under high-to-extreme water stress<sup class="src" title="NITI Aayog, Composite Water Management Index, 2018.">NITI 2018</sup></span>
+        </div>
+        <div class="bigstat" data-reveal data-reveal-d="1">
+          <span class="num clay" data-count="30" data-suf="M">0</span>
+          <span class="lbl">waterborne-disease cases a year<sup class="src" title="MoHFW / national disease surveillance.">MoHFW</sup></span>
+        </div>
+        <div class="bigstat" data-reveal data-reveal-d="2">
+          <span class="num clay" data-count="300000" data-dur="2000">0</span>
+          <span class="lbl">deaths a year linked to unsafe water &amp; sanitation<sup class="src" title="WHO estimate for India.">WHO</sup></span>
+        </div>
+      </div>
+
+      <h3 data-reveal style="margin-bottom:6px">Hover a state. The colour is how hard its water is being pushed.</h3>
+      <p class="note" data-reveal style="margin-bottom:30px">A schematic cartogram — positions are indicative, not survey-accurate. Stress blends groundwater depletion and contamination.</p>
+
+      <div class="cartowrap">
+        <div class="carto" id="carto-grid" data-reveal aria-label="Schematic map of Indian states by water stress"></div>
+        <div class="carto-side" id="carto-side" data-reveal data-reveal-d="1">
+          <h3 class="panel-title">Punjab</h3>
+          <p class="panel-sub">—</p>
+          <div class="carto-stat">
+            <div class="k">Main source</div>
+            <div class="v" data-f="source">—</div>
+          </div>
+          <div class="carto-stat">
+            <div class="k">Known contaminants</div>
+            <div class="v" data-f="cont">—</div>
+          </div>
+          <div class="carto-stat">
+            <div class="k">Stress level</div>
+            <div class="v"><span class="stress-pill"><span class="sdot"></span><span class="txt">—</span></span></div>
+          </div>
+          <div class="stress-legend" aria-hidden="true">
+            <i style="background:var(--s0)"></i><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i>
+          </div>
+          <div class="stress-legend-lbl"><span>safe</span><span>severe</span></div>
+        </div>
+      </div>
+
+      <div class="col" style="margin-top:56px">
+        <p class="body" data-reveal>Read the north-west: Punjab, Haryana, Rajasthan, Delhi — the breadbasket, drawn in the deepest red. The Green Revolution that fed the country was paid for in groundwater, and the bill is now overdue. Read the east: Bengal, Bihar, Assam sit on plenty of water that is quietly poisoned by arsenic. <em class="ital">Too little</em> and <em class="ital">unsafe</em> are different failures wearing the same colour.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 · CONTAMINATION / INDORE ============ -->
+  <section class="chapter clay-bg" id="ch05" data-screen-label="05 Contamination">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="kicker clay" style="color:oklch(0.88 0.06 60)" data-reveal>05 — When the pipe betrays you</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">Indore is India's cleanest city. In December, its water killed.</h2>
+      </div>
+
+      <div class="col">
+        <p class="lede" data-reveal>For eight years running, Indore won the title of cleanest city in India.<sup class="src" title="Swachh Survekshan rankings, 2017–2024/25.">Swachh</sup> In late December 2025, residents of Bhagirathpura noticed their tap water had turned bitter and foul. With no real alternative, many kept drinking it.</p>
+        <div class="statrow" style="margin:36px 0 12px">
+          <div class="bigstat" data-reveal>
+            <span class="num" style="color:var(--paper)" data-count="15" data-pre="≥">0</span>
+            <span class="lbl" style="color:oklch(0.92 0.03 60)">people dead — including a six-month-old infant</span>
+          </div>
+          <div class="bigstat" data-reveal data-reveal-d="1">
+            <span class="num" style="color:var(--paper)" data-count="2000" data-pre="~">0</span>
+            <span class="lbl" style="color:oklch(0.92 0.03 60)">fell ill across one locality</span>
+          </div>
+          <div class="bigstat" data-reveal data-reveal-d="2">
+            <span class="num" style="color:var(--paper)" data-count="40000" data-pre="~">0</span>
+            <span class="lbl" style="color:oklch(0.92 0.03 60)">residents screened, door to door, after the fact</span>
+          </div>
+        </div>
+        <p class="body" data-reveal style="color:oklch(0.93 0.03 60)">The cause was almost banal: a public toilet had been built directly over a drinking-water pipeline, with no septic tank. Sewage seeped into the supply.<sup class="src" title="2025 Indore drinking water contamination — investigation findings; news reporting Dec 2025–Jan 2026.">Indore 2025</sup> The water tested positive for bacteria found in human waste.</p>
+      </div>
+
+      <div class="col" style="margin-top:40px">
+        <p class="pull" data-reveal style="color:var(--paper)">A city can win every award for cleanliness <span class="em" style="opacity:.78">and still lay a pipe beside a sewer.</span></p>
+        <p class="body" data-reveal data-reveal-d="1" style="color:oklch(0.93 0.03 60); margin-top:28px">That is the whole thesis in one street. The plan said <em class="ital">safe water</em>. The audit said <em class="ital">cleanest city</em>. The reality was sewage, and a funeral for an infant. Indore is not an outlier — it's the visible version of what 30 million illnesses a year look like when one of them makes the news.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 06 · NEER TOOL ============ -->
+  <section class="chapter" id="ch06" data-screen-label="06 Neer tool">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" data-reveal>06 — From reading to knowing</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">Neer — know your water.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">The awareness has to land somewhere local. This tool — <span class="serif-em">Neer</span> — lets you pick a state and see what's actually in the water, how stressed the source is, and what to do about it.</p>
+        <p class="note" data-reveal data-reveal-d="3">Formerly <b>Pukhuri</b> (Assamese, <em>pond</em>). Renamed <b>Neer (नीर)</b> — water — the word that carries across the languages of the states where it's scarcest, from Tamil Nadu's Day-Zero south to the parched north-west.</p>
+      </div>
+
+      <div class="tool" id="neer-tool" data-reveal>
+        <div class="tool-bar">
+          <span class="tdot"></span>
+          <span class="tname">Neer<span class="deva"> · नीर</span></span>
+          <span class="tcap">know your water · India</span>
+          <span class="spacer"></span>
+          <label class="tcap" for="neer-state" style="margin-right:-6px">State</label>
+          <select id="neer-state" aria-label="Choose a state"></select>
+        </div>
+        <div class="tool-body">
+          <div class="tool-map">
+            <div class="mini-carto" id="neer-mini" aria-label="Pick a state on the map"></div>
+            <p class="note" style="margin:0">Tap a state on the map or use the dropdown. Colour = water-security stress.</p>
+          </div>
+          <div class="tool-info" id="neer-info"></div>
+        </div>
+      </div>
+      <p class="note" data-reveal style="margin-top:18px">Indicative public-data summary for orientation — not a substitute for a local NABL-accredited water test. Found a problem? Report to your state PHED / Jal Jeevan helpline and ask for the block's water-quality map.</p>
+
+      <!-- Deep dive into the full Neer tool (Streamlit app) -->
+      <div class="deepdive-row" data-reveal style="margin-top:36px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;">
+        <a class="deepdive-btn" href="/Map_and_Source" target="_top"
+           style="display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:6px;
+                  background:var(--water-deep);color:var(--paper);text-decoration:none;
+                  font-family:var(--sans);font-weight:600;letter-spacing:-0.005em;">
+          Open the full tool — district level →
+        </a>
+        <span class="note" style="margin:0;max-width:46ch">
+          The state view above is the orientation. The full tool goes <em class="ital">district by district</em> —
+          ~160 districts, contaminants, BIS limits, treatment options, government schemes, and a
+          grievance drafter that routes complaints to the right authority and gives you a printable PDF.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ============ 07 · AI DILEMMA ============ -->
+  <section class="chapter dark" id="ch07" data-screen-label="07 AI dilemma">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" style="color:oklch(0.78 0.09 230)" data-reveal>07 — The dilemma I'm writing inside</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">This site was built with AI. AI drinks water. So let's be honest about it.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">Data centres use water. So do electric cars, beef, rice, almonds, ethanol, the phone in your hand. The guilt is real — but guilt is a bad accountant. <span class="serif-em">Not all water use is equal</span>, and pretending it is helps no one in Bhagirathpura.</p>
+      </div>
+
+      <div class="col" data-reveal>
+        <h3 style="color:oklch(0.82 0.09 230)">The first honest distinction: withdrawn vs. consumed.</h3>
+        <div class="wc-diagram" id="ai-diagram">
+          <div class="wc-box draw">
+            <div class="wc-h">Withdrawn</div>
+            <div class="wc-n"><span data-count="29">0</span> bn L</div>
+            <small>borrowed from a source, much of it returned. One tech firm's own data centres, 2023.</small>
+          </div>
+          <div class="wc-box cons">
+            <div class="wc-h">Consumed / evaporated</div>
+            <div class="wc-n"><span data-count="23">0</span> bn L</div>
+            <small>gone to the sky as vapour — and ~80% of it was drinking-quality water.<sup class="src" title="Li et al., Making AI Less Thirsty, UC Riverside.">UCR</sup></small>
+          </div>
+        </div>
+        <p class="body" data-reveal style="margin-top:24px">A 100-megawatt AI facility can consume around <strong>2 million litres a day</strong> — the water of about 6,500 households — and most data centres evaporate roughly 80% of what they draw.<sup class="src" title="IEA, Energy & AI, 2025; Shaolei Ren, UC Riverside.">IEA</sup> Globally, data centres consume an estimated <strong>560 billion litres a year</strong>, heading toward <strong>1,200 billion by 2030.</strong></p>
+      </div>
+
+      <div class="col" style="margin-top:48px">
+        <h3 data-reveal style="color:oklch(0.82 0.09 230)">The second: a litre is not a litre.</h3>
+        <p class="body" data-reveal>What actually makes water use harmful isn't the headline number — it's four things underneath it.</p>
+      </div>
+
+      <div class="equal-grid" data-reveal>
+        <div class="eq">
+          <div class="eqk">Quality</div>
+          <h4>Potable vs. recycled</h4>
+          <p>Evaporating treated drinking water in a thirsty city is worlds apart from a closed loop on recycled or grey water.</p>
+        </div>
+        <div class="eq">
+          <div class="eqk">Place</div>
+          <h4>Where it's drawn</h4>
+          <p>A litre in rain-soaked Kerala isn't a litre in arid Rajasthan. By the 2050s ~45% of data centres may sit in high water stress.<sup class="src" title="S&P Global.">S&amp;P</sup></p>
+        </div>
+        <div class="eq">
+          <div class="eqk">Fate</div>
+          <h4>Returned vs. gone</h4>
+          <p>Withdrawn-and-returned water re-enters the system. Evaporated water leaves the local basin entirely.</p>
+        </div>
+        <div class="eq">
+          <div class="eqk">Honesty</div>
+          <h4>Measured vs. guessed</h4>
+          <p>"One prompt = a bottle of water" is largely a journalistic shortcut. Real intensity varies up to 10,000× by site.<sup class="src" title="Lawrence Berkeley National Laboratory, 2025.">LBNL</sup></p>
+        </div>
+      </div>
+
+      <div class="col" style="margin-top:56px">
+        <h3 data-reveal style="color:oklch(0.82 0.09 230)">The third: scale and proportion.</h3>
+        <p class="body" data-reveal>Put your AI prompt next to the rest of an ordinary day. The bars are litres.</p>
+        <div class="barchart" id="footprint-bars" style="margin-top:18px"></div>
+        <p class="note" data-reveal style="margin-top:22px">The model query is a rounding error beside a hamburger. That doesn't make data centres harmless — at city scale, in the wrong place, they bite. It means the biggest levers most of us hold are on the plate, not the keyboard.<sup class="src" title="Water Footprint Network; Hoekstra & Mekonnen.">WFN</sup></p>
+      </div>
+
+      <div class="col" style="margin-top:48px">
+        <p class="pull" data-reveal style="color:var(--paper)">The answer to guilt isn't to stop.<br>It's to <span class="em" style="opacity:.8">know which litres matter</span>, and spend them where the rain is.</p>
+        <p class="body" data-reveal data-reveal-d="1" style="margin-top:26px">There is genuine progress: closed-loop, zero-evaporation cooling can cut a single facility's water by 125 million litres a year.<sup class="src" title="Microsoft, Dec 2025 — closed-loop zero-water cooling.">2025</sup> The fix for AI's thirst is the same as the fix for everything in this story — measure honestly, build in the right place, and don't pretend the paper is the pipe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 08 · ACT ============ -->
+  <section class="chapter" id="ch08" data-screen-label="08 Closing the gap">
+    <div class="inner">
+      <div class="chapter-head col">
+        <span class="chno" data-reveal>08 — Closing the gap</span>
+        <h2 class="section-title" data-reveal data-reveal-d="1">Make the paper truer. Then make it real.</h2>
+        <p class="lede" data-reveal data-reveal-d="2">Being grateful and educated is the floor, not the ceiling. The point of seeing the gap is to stand in it. A few honest places to start —</p>
+      </div>
+
+      <div class="act-grid">
+        <div class="act-card" data-reveal>
+          <span class="an">01</span>
+          <h4>Know your own litres</h4>
+          <p>Learn the water cost of what you eat, wear and buy — the plate moves far more water than the keyboard. Eat down the chart. Waste less of what's already treated.</p>
+        </div>
+        <div class="act-card" data-reveal data-reveal-d="1">
+          <span class="an">02</span>
+          <h4>Read the businesses around you</h4>
+          <p>Ask where companies, bottlers and data centres draw their water, whether it's potable, and whether they're in a stressed basin. Demand it's disclosed, not guessed.</p>
+        </div>
+        <div class="act-card" data-reveal data-reveal-d="2">
+          <span class="an">03</span>
+          <h4>Test, report, harvest</h4>
+          <p>Get water tested at an accredited lab before trusting a new source. Report foul supply early. Harvest rain where you can — in many states it's already the law on paper.</p>
+        </div>
+        <div class="act-card" data-reveal data-reveal-d="3">
+          <span class="an">04</span>
+          <h4>Fund the people closing the gap</h4>
+          <p>Support charities and local bodies bringing safe water to those without it — the most direct way to turn someone else's paper promise into a real glass of water.</p>
+        </div>
+      </div>
+
+      <div class="col center" style="margin-top:72px; text-align:center">
+        <p class="pull" data-reveal style="margin-inline:auto">Water on paper is a promise.<br><span class="em">Water in the glass is the proof.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot" data-screen-label="Footer">
+    <div class="inner">
+      <span class="kicker" style="color:oklch(0.7 0.09 230)">Read the full article</span>
+      <h2 class="display" style="font-size:clamp(2.4rem,5vw,4rem); margin:14px 0 28px; max-width:16ch; line-height:1.0">The companion ends here. The argument continues on paper.</h2>
+      <a class="cta" href="#" id="article-link">Read &ldquo;Water on Paper&rdquo; &nbsp;→</a>
+
+      <div class="fcols">
+        <div>
+          <h5>About this site</h5>
+          <p>An ancillary, data-driven companion to the article <em>Water on Paper</em> — moving from the global picture to India, and confronting the water cost of the AI used to build it.</p>
+          <p style="margin-top:14px">Tool: <b style="color:var(--paper)">Neer · नीर</b> — formerly Pukhuri.</p>
+        </div>
+        <div>
+          <h5>Explore</h5>
+          <a href="#ch01">A blue planet</a>
+          <a href="#ch04">India, drawn by water</a>
+          <a href="#ch05">When the pipe betrays you</a>
+          <a href="#ch06">Neer — know your water</a>
+          <a href="#ch07">The AI dilemma</a>
+          <a href="#ch08">Closing the gap</a>
+        </div>
+        <div>
+          <h5>Get water tested / report</h5>
+          <p>State PHED &amp; Jal Jeevan Mission helplines</p>
+          <p>NABL-accredited testing labs</p>
+          <p>Central Ground Water Board atlases</p>
+          <p>Your municipal water-quality cell</p>
+        </div>
+      </div>
+
+      <div style="margin-top:48px">
+        <h5 style="font-family:var(--mono); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:oklch(0.7 0.03 235); margin:0 0 16px">Sources &amp; notes</h5>
+        <ul class="sources" id="sources-list"></ul>
+      </div>
+
+      <p class="legal">Water on Paper — companion microsite. Figures are drawn from public reporting and research and are indicative; verify before citing. Schematic maps are illustrative, not survey-accurate. Built, candidly, with AI — see Chapter 07.</p>
+    </div>
+  </footer>
+
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/map.js"></script>
+<script src="assets/main.js"></script>
+<script>
+  // render sources list from data
+  (function(){
+    const ul = document.getElementById('sources-list');
+    if(ul && window.WOP){ window.WOP.SOURCES.forEach((s,i)=>{
+      const li=document.createElement('li');
+      li.innerHTML = `<b>${String(i+1).padStart(2,'0')}</b>&nbsp; ${s}`;
+      ul.appendChild(li);
+    }); }
+  })();
+</script>
+
+<!-- direct-edit style overrides -->
+<style id="__om-edit-overrides"></style>
+</body>
+</html>

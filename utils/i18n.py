@@ -11,7 +11,7 @@ from __future__ import annotations
 
 LANGS: dict[str, dict[str, str]] = {
     "en": {
-        "app_title": "Pukhuri — Know Your Water",
+        "app_title": "Neer — Know Your Water",
         "app_tagline": "Where does your water come from? What's in it? Who do you talk to when something's wrong?",
         "nav_map": "Map & Source",
         "nav_contaminants": "Contaminants & Restoration",
@@ -49,7 +49,7 @@ LANGS: dict[str, dict[str, str]] = {
     },
     # ---- Hindi ----------------------------------------------------------
     "hi": {
-        "app_title": "पुखुरी — अपना पानी जानें",
+        "app_title": "नीर — अपना पानी जानें",
         "app_tagline": (
             "आपका पानी कहाँ से आता है? उसमें क्या है? कुछ गलत होने पर आप किससे बात करते हैं?"
         ),
@@ -91,7 +91,7 @@ LANGS: dict[str, dict[str, str]] = {
     },
     # ---- Tamil ----------------------------------------------------------
     "ta": {
-        "app_title": "புகுரி — உங்கள் தண்ணீரை அறியுங்கள்",
+        "app_title": "நீர் — உங்கள் தண்ணீரை அறியுங்கள்",
         "app_tagline": (
             "உங்கள் தண்ணீர் எங்கிருந்து வருகிறது? அதில் என்ன உள்ளது? "
             "ஏதாவது தவறு நடந்தால் யாரிடம் பேசுவீர்கள்?"

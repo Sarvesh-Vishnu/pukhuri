@@ -1,131 +1,95 @@
-"""Pukhuri — Know Your Water (India). Streamlit entrypoint.
+"""Water on Paper — series cover.
 
-Run: `streamlit run Home.py` from the water-india/ directory.
+The landing page hosts the full *Water on Paper* editorial scrollytelling
+microsite (the static design bundle under `static/water_on_paper/`) inside a
+single Streamlit `components.html` iframe. The four deep-tool pages (Map,
+Contaminants, Grievance, Groundwater) live as siblings under `pages/` and
+share the same Spline Sans / Instrument Serif design tokens via theme.py.
+
+The essay's Chapter 06 "Neer — know your water" panel has a deep-dive button
+that escapes the iframe (`target="_top"`) into the Streamlit Map page, so the
+transition from the editorial to the tool happens in-place.
 """
 from __future__ import annotations
 
+import re
+from pathlib import Path
+
 import streamlit as st
+import streamlit.components.v1 as components
 
-from utils.theme import feature_card, hero, init_page, section_banner
+st.set_page_config(
+    page_title="Water on Paper — Neer",
+    page_icon="💧",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
 
-init_page(title="Home", icon="💧")
+ESSAY_DIR = Path(__file__).resolve().parent / "static" / "water_on_paper"
+ASSETS = ESSAY_DIR / "assets"
 
 
-def main() -> None:
-    hero(
-        title="Pukhuri",
-        subtitle=(
-            "Where does your water come from? What's in it? Who do you talk to when something's wrong? "
-            "A district-level guide to India's drinking water — sources, contaminants, restoration, and "
-            "grievance routing — built on public CGWB, CPCB, BIS, and CWC data."
-        ),
-        badge="Snapshot · 2024",
-        photo="hero.jpg",
-        photo_credit="Shubham Thakur (Pexels)",
-        photo_credit_url="https://www.pexels.com/@shubhamthakur/",
+@st.cache_data(show_spinner=False)
+def _build_essay_html() -> str:
+    """Inline the static bundle (HTML + CSS + JS) into a single string."""
+    html = (ESSAY_DIR / "index.html").read_text(encoding="utf-8")
+    css = (ASSETS / "styles.css").read_text(encoding="utf-8")
+    data_js = (ASSETS / "data.js").read_text(encoding="utf-8")
+    charts_js = (ASSETS / "charts.js").read_text(encoding="utf-8")
+    map_js = (ASSETS / "map.js").read_text(encoding="utf-8")
+    main_js = (ASSETS / "main.js").read_text(encoding="utf-8")
+
+    # Inline the stylesheet
+    html = html.replace(
+        '<link rel="stylesheet" href="assets/styles.css" />',
+        f"<style>\n{css}\n</style>",
     )
-
-    section_banner(
-        "<strong>Snapshot, not live.</strong> Curated from CGWB, CPCB, BIS 10500:2012, Jal Jeevan Mission, "
-        "AMRUT, Namami Gange, CWC reservoir bulletin, and state PHED websites. Snapshot date and per-row "
-        "sources are listed at the bottom of each page. For an emergency or current-day water quality, "
-        "contact your local authority directly."
+    # Strip external <script src="assets/*.js"> tags — we re-inject them inline
+    # in the correct load order (data → charts → map → main) before </body>.
+    html = re.sub(r'<script src="assets/[^"]+"></script>\s*', "", html)
+    inlined = (
+        f"<script>\n{data_js}\n</script>\n"
+        f"<script>\n{charts_js}\n</script>\n"
+        f"<script>\n{map_js}\n</script>\n"
+        f"<script>\n{main_js}\n</script>\n"
     )
-
-    # 2x2 feature grid
-    col1, col2 = st.columns(2, gap="large")
-    with col1:
-        feature_card(
-            icon="explore",
-            title="Map & Source",
-            body=(
-                "Pick your state and district to see your dominant water source, "
-                "the river basin you're in, and which districts have known contamination."
-            ),
-            page="pages/1_Map_and_Source.py",
-            link_label="Open the map",
-        )
-        feature_card(
-            icon="science",
-            title="Contaminants & Restoration",
-            body=(
-                "What fluoride, arsenic, nitrate, iron, salinity, uranium and microbial contamination "
-                "do to health — and how households, communities, and government schemes treat each."
-            ),
-            page="pages/2_Contaminants_and_Restoration.py",
-            link_label="Read the guide",
-        )
-    with col2:
-        feature_card(
-            icon="trending_down",
-            title="Groundwater, Reservoirs & Data Centres",
-            body=(
-                "How stressed your state's groundwater is (CGWB), the reservoirs that buffer your supply (CWC), "
-                "and the data-centre footprint sitting on top — much of it in already-stressed corridors."
-            ),
-            page="pages/4_Groundwater_and_Demand.py",
-            link_label="See the stress map",
-        )
-        feature_card(
-            icon="edit_note",
-            title="Grievance Drafter",
-            body=(
-                "Draft a formal water complaint to the right authority for your state — rural PHED, urban "
-                "water board, or grievance portal — with CPGRAMS as the universal escalation."
-            ),
-            page="pages/3_Grievance_Drafter.py",
-            link_label="Draft a complaint",
-        )
-
-    st.markdown("## Why this site")
-    st.markdown(
-        """
-- **Built for India.** Data comes from the Central Ground Water Board (CGWB), Central Pollution Control
-  Board (CPCB), Bureau of Indian Standards (IS 10500:2012), Jal Jeevan Mission dashboard, and state
-  Public Health Engineering Department (PHED) websites.
-- **District-level honesty.** Going below district level (block / village) requires data we don't have.
-  If your district has known contamination, we surface it from CGWB Year Books. If a district isn't in
-  our snapshot, that **does not mean it's safe** — it means we don't have district-level evidence yet.
-  Always test your own water before relying on it.
-- **Snapshot, not live.** Government APIs are unreliable; CGWB and CWC publish at known cadences anyway.
-  We snapshot the data and tell you when.
-- **No automation of grievances.** We draft and route — *you* file. Accountability for a government
-  complaint should always rest with the citizen who signs it.
-        """.strip()
-    )
-
-    with st.expander("Data sources & snapshot date"):
-        st.markdown(
-            """
-- **Snapshot date:** 2024-01-01 (state/contaminants/authorities/districts).
-- **Bureau of Indian Standards** — IS 10500:2012, *Drinking Water Specification*.
-- **CGWB** — Ground Water Year Book of India (annual); *Dynamic Ground Water Resources of India 2022*
-  (state stress); National Aquifer Mapping (NAQUIM) reports.
-- **CWC** — Weekly Reservoir Storage Bulletin (Central Water Commission); capacity figures from public
-  dam-safety records.
-- **CPCB** — Water Quality Monitoring Network; designated best-use river classification.
-- **Jal Jeevan Mission dashboard** — `ejalshakti.gov.in/jjmreport/JJMIndia.aspx` (rural FHTC coverage).
-- **NITI Aayog** — Composite Water Management Index reports (state water profile context).
-- **State PHED / Water Supply Boards** — public websites; per-state links in `data/authorities.json`.
-- **CPGRAMS** — `pgportal.gov.in` (universal grievance escalation).
-- **Data centres** — operator press releases, MeitY data-centre policy notifications, and state IT/ITeS
-  investment portals (Maharashtra, Tamil Nadu, Telangana, Karnataka, Uttar Pradesh, Gujarat). Operating
-  + publicly-announced sites only. Water-draw figures are estimates: IT-load × 24 h × 1.8 L/kWh
-  (industry rule-of-thumb, Uptime Institute).
-
-Coordinates for districts, reservoirs, and data centres are approximate (district-HQ / area-level,
-~2 decimal places) — for map markers, not survey-grade.
-            """.strip()
-        )
-
-    st.markdown(
-        "<div style='margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border-color);"
-        "color:var(--text-secondary);font-size:0.85rem;'>"
-        "<strong>পুখুৰী</strong> <em>(pukhuri)</em> — Assamese for the traditional village pond. "
-        "Open source, MIT licensed."
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    html = html.replace("</body>", f"{inlined}</body>")
+    return html
 
 
-main()
+# ---------------------------------------------------------------------------
+# Streamlit chrome — strip everything that interferes with the editorial.
+st.markdown(
+    """
+    <style>
+      [data-testid="stHeader"], [data-testid="stDecoration"],
+      #MainMenu, footer, [data-testid="stStatusWidget"] { display: none !important; }
+      .stApp { background: #f9f4ec !important; }
+      .block-container { padding: 0 !important; max-width: 100% !important; }
+      [data-testid="stMainBlockContainer"] { padding: 0 !important; }
+      [data-testid="stSidebar"][aria-expanded="false"] { width: 0 !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# The essay itself — full-bleed iframe. 920 px is one comfortable viewport;
+# the embed scrolls internally so each chapter's animations fire naturally.
+components.html(_build_essay_html(), height=920, scrolling=True)
+
+# A quiet footer breadcrumb under the iframe so multipage navigation is still
+# discoverable for users who collapse the sidebar.
+st.markdown(
+    """
+    <div style="text-align:center;padding:28px 16px 36px;
+                color:#80828a;font-family:'Spline Sans Mono', ui-monospace, monospace;
+                font-size:0.78rem;letter-spacing:0.06em;">
+      Continue into <b style="color:#2c5878">Neer</b> · the full tool ↓ &nbsp;·&nbsp;
+      <a href="/Map_and_Source"            target="_self" style="color:#3f86c0;text-decoration:none">Map &amp; Source</a> &nbsp;·&nbsp;
+      <a href="/Contaminants_and_Restoration" target="_self" style="color:#3f86c0;text-decoration:none">Contaminants</a> &nbsp;·&nbsp;
+      <a href="/Grievance_Drafter"         target="_self" style="color:#3f86c0;text-decoration:none">Grievance</a> &nbsp;·&nbsp;
+      <a href="/Groundwater_and_Demand"    target="_self" style="color:#3f86c0;text-decoration:none">Groundwater</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)

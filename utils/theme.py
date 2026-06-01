@@ -1,4 +1,4 @@
-"""Theme + shared chrome (sidebar) for all Pukhuri pages.
+"""Theme + shared chrome (sidebar) for all Neer pages.
 
 `init_page(...)` is called at the very top of every page. It:
 1. Configures st.set_page_config (title, icon, layout).
@@ -53,14 +53,22 @@ def _cached_img_uri(path_str: str) -> str | None:
 
 _BASE_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Spline+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
 
 html, body, [class*="css"], .stApp, .stMarkdown, .stText {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-family: 'Spline Sans', ui-sans-serif, system-ui, -apple-system, sans-serif !important;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
-code, pre, kbd { font-family: 'JetBrains Mono', ui-monospace, monospace !important; }
+code, pre, kbd { font-family: 'Spline Sans Mono', ui-monospace, monospace !important; }
+[data-testid="stCaptionContainer"], .stCaption,
+[data-testid="stMetricLabel"], .pukhuri-badge {
+    font-family: 'Spline Sans Mono', ui-monospace, monospace !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.78rem !important;
+}
 
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined' !important;
@@ -92,14 +100,22 @@ code, pre, kbd { font-family: 'JetBrains Mono', ui-monospace, monospace !importa
 [data-testid="stDecoration"] { display: none !important; }
 .stApp > header { height: 0 !important; }
 
-h1, h2, h3, h4 {
-    font-weight: 600 !important;
-    letter-spacing: -0.02em !important;
-    line-height: 1.2 !important;
+/* Display headings use Instrument Serif (matches Water on Paper essay) */
+h1, h2 {
+    font-family: 'Instrument Serif', Georgia, serif !important;
+    font-weight: 400 !important;
+    letter-spacing: -0.015em !important;
+    line-height: 1.0 !important;
 }
-h1 { font-size: 2.25rem !important; }
-h2 { font-size: 1.5rem !important; margin-top: 2rem !important; }
-h3 { font-size: 1.15rem !important; }
+h3, h4 {
+    font-family: 'Spline Sans', ui-sans-serif, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.25 !important;
+}
+h1 { font-size: 3rem !important; margin-bottom: 0.4em !important; }
+h2 { font-size: 2rem !important; margin-top: 2rem !important; }
+h3 { font-size: 1.2rem !important; }
 
 p, li { line-height: 1.65; }
 
@@ -325,17 +341,20 @@ hr { border-color: var(--border-color) !important; opacity: 0.6; }
 _LIGHT = """
 <style>
 :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f6f8fc;
-    --bg-card: #ffffff;
-    --bg-banner: #f0f7ff;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --accent: #0284c7;
-    --accent-hover: #0369a1;
-    --border-color: #e5e9f0;
-    --hero-from: #0ea5e9;
-    --hero-to: #0369a1;
+    /* Water on Paper — paper & ink palette */
+    --bg-primary: #f9f4ec;       /* paper */
+    --bg-secondary: #f1ebe0;     /* paper-2 (sidebar / panels) */
+    --bg-card: #f9f4ec;          /* card */
+    --bg-banner: rgba(63,134,192,0.12);  /* water-mist */
+    --text-primary: #2b2d33;     /* ink */
+    --text-secondary: #54565d;   /* ink-soft */
+    --text-faint: #80828a;       /* ink-faint */
+    --accent: #3f86c0;           /* water */
+    --accent-hover: #2c5878;     /* water-deep */
+    --border-color: #e4dccd;     /* paper-edge */
+    --hero-from: #3f86c0;
+    --hero-to: #2c5878;
+    --clay: #c06a3f;             /* clay — scarcity/alarm */
 }
 .stApp { background: var(--bg-primary) !important; }
 [data-testid="stSidebar"] { background: var(--bg-secondary) !important; }
@@ -345,17 +364,20 @@ _LIGHT = """
 _DARK = """
 <style>
 :root {
-    --bg-primary: #0b1120;
-    --bg-secondary: #131b2e;
-    --bg-card: #161f36;
-    --bg-banner: #14233e;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --accent: #38bdf8;
-    --accent-hover: #0ea5e9;
-    --border-color: #243049;
-    --hero-from: #0c4a6e;
-    --hero-to: #082f49;
+    /* Water on Paper — water-ink dark palette (matches section.dark in essay) */
+    --bg-primary: #22394e;       /* water-ink */
+    --bg-secondary: #1a2c3d;     /* darker variant */
+    --bg-card: #2c5878;          /* water-deep panel */
+    --bg-banner: rgba(63,134,192,0.18);
+    --text-primary: #f9f4ec;     /* paper */
+    --text-secondary: #c8b8a0;   /* soft paper */
+    --text-faint: #80828a;
+    --accent: #5fa5d8;           /* lifted water for contrast */
+    --accent-hover: #7ec0e8;
+    --border-color: #34536c;
+    --hero-from: #2c5878;
+    --hero-to: #22394e;
+    --clay: #d97f4a;
 }
 .stApp, body {
     background: var(--bg-primary) !important;
@@ -492,14 +514,14 @@ h1 a, h2 a, h3 a, h4 a { color: var(--accent) !important; }
 def init_page(*, title: str, icon: str = "💧", layout: str = "wide") -> None:
     """Single-call setup for every page."""
     st.set_page_config(
-        page_title=f"{title} — Pukhuri",
+        page_title=f"{title} — Neer",
         page_icon=icon,
         layout=layout,
         initial_sidebar_state="expanded",
         menu_items={
             "Get help": None,
             "Report a bug": None,
-            "About": "Pukhuri — know your water in India.",
+            "About": "Neer — know your water in India. A Water on Paper companion.",
         },
     )
     _init_state()
@@ -789,8 +811,9 @@ def _render_sidebar() -> None:
     districts_df = load_districts()
 
     with st.sidebar:
-        st.markdown("### Pukhuri")
-        st.caption("Know your water — India")
+        st.markdown("### Neer · नीर")
+        st.caption("Know your water — India · Water on Paper series")
+        st.page_link("Home.py", label="← Water on Paper (essay)", icon=":material/menu_book:")
 
         st.toggle(
             "Dark mode",
