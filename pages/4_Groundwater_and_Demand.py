@@ -22,7 +22,7 @@ from utils.data_loader import (
     load_states,
     nearest_data_centres,
 )
-from utils.theme import init_page, page_header, render_map
+from utils.theme import MAP_ATTR, MAP_TILES, init_page, page_header, render_map
 
 init_page(title="Groundwater & Demand", icon="📉")
 
@@ -47,7 +47,7 @@ def stress_map(focus_state: str | None) -> folium.Map:
             center = (row.iloc[0]["lat"], row.iloc[0]["lon"])
             zoom = 6
 
-    m = folium.Map(location=center, zoom_start=zoom, tiles="cartodbpositron", control_scale=True)
+    m = folium.Map(location=center, zoom_start=zoom, tiles=MAP_TILES, attr=MAP_ATTR, control_scale=True)
 
     for _, r in merged.iterrows():
         if pd.isna(r.get("stage_of_extraction_pct")):
@@ -104,7 +104,7 @@ def reservoirs_dc_map(focus_state: str | None, show_reservoirs: bool, show_dcs: 
             center = (sub["lat"].mean(), sub["lon"].mean())
             zoom = 7
 
-    m = folium.Map(location=center, zoom_start=zoom, tiles="cartodbpositron", control_scale=True)
+    m = folium.Map(location=center, zoom_start=zoom, tiles=MAP_TILES, attr=MAP_ATTR, control_scale=True)
 
     if show_reservoirs:
         cluster_r = MarkerCluster(name="Reservoirs (CWC)", show=True).add_to(m)
@@ -243,7 +243,7 @@ def cpcb_map(focus_state: str | None) -> folium.Map:
             center = (sub["lat"].mean(), sub["lon"].mean())
             zoom = 7
 
-    m = folium.Map(location=center, zoom_start=zoom, tiles="cartodbpositron", control_scale=True)
+    m = folium.Map(location=center, zoom_start=zoom, tiles=MAP_TILES, attr=MAP_ATTR, control_scale=True)
 
     for _, r in df.iterrows():
         # Marker radius: bigger = worse (Priority I biggest)

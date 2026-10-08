@@ -24,6 +24,18 @@ from .i18n import LANG_LABELS, t
 ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
 PHOTOS_DIR = ASSETS_DIR / "photos"
 
+# Basemap for every folium map, defined once so a provider change is a one-line fix.
+# CARTO's "cartodbpositron" began serving "API KEY REQUIRED" watermark tiles, so we
+# use Esri's keyless World Light Gray Base — same quiet light-grey look.
+MAP_TILES = (
+    "https://server.arcgisonline.com/ArcGIS/rest/services/"
+    "Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+)
+MAP_ATTR = (
+    "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap "
+    "contributors, and the GIS User Community"
+)
+
 
 def _flatten_html(s: str) -> str:
     """Collapse multi-line indented HTML to a single line.

@@ -13,7 +13,7 @@ from utils.data_loader import (
     load_states,
 )
 from utils.i18n import t
-from utils.theme import init_page, page_header, render_map
+from utils.theme import MAP_ATTR, MAP_TILES, init_page, page_header, render_map
 
 init_page(title="Map & Source", icon="🗺️")
 
@@ -52,7 +52,7 @@ def build_map(districts_df, focus_state: str | None, focus_district: str | None)
     else:
         center, zoom = (22.0, 80.0), 5
 
-    m = folium.Map(location=center, zoom_start=zoom, tiles="cartodbpositron", control_scale=True)
+    m = folium.Map(location=center, zoom_start=zoom, tiles=MAP_TILES, attr=MAP_ATTR, control_scale=True)
     cluster = MarkerCluster(name="Districts", show=True).add_to(m)
 
     for _, r in districts_df.iterrows():
